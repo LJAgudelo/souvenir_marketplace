@@ -29,7 +29,7 @@ const Profile = () => {
 
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch('http://localhost:3001/profile/'+storedUser.usuario.id_users);
+        const response = await fetch('http://localhost:4001/profile/'+storedUser.usuario.id_users);
         const data = await response.json();
 
         if (data.ok) {
