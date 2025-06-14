@@ -24,10 +24,10 @@ const Galery = () => {
       Elige tu Producto
     </h2>
     <div className="flex flex-wrap bg-[#f2b035] justify-center gap-6 p-6">
-      {products.map(({ id, image, name }) => (
+      {products.map(({ id_product, image_url, name }) => (
         <img
-          key={id}
-          src={image}
+          key={id_product}
+          src={`http://localhost:4001${image_url}`}
           alt={name}
           onClick={() => navigate("/register")}
           className="w-44 h-44 object-cover rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
