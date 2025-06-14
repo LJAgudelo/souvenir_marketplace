@@ -11,15 +11,24 @@ const Sell = () => {
         name: '',
         description: '',
         price: '',
+        stock :'',
         image: null
     });
 
     const [previewImage, setPreviewImage] = useState(null);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProduct({ ...product, [name]: value });
-    };
+    
+
+     const handleChange = (e) => {
+         const { name, value } = e.target;
+         
+        if (name === "stock") {
+            const newValue = value === "0" ? "0" : value.replace(/^0+/, "");
+            setProduct({ ...product, [name]: newValue });
+         } else {
+            setProduct({ ...product, [name]: value });
+  }
+     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -41,7 +50,7 @@ const Sell = () => {
         formData.append('name', product.name);
         formData.append('description', product.description);
         formData.append('price', product.price);
-        formData.append('stock', 0); 
+        formData.append('stock', product.stock); 
         formData.append('image', product.image);
 
         try {
@@ -105,6 +114,21 @@ const Sell = () => {
                                         rows="4"
                                         placeholder="Write a few sentences about the product..."
                                         className="rounded-md w-full mt-1 px-3 py-2 border border-gray-300 bg-[#fff8e7]"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="stock" className="block text-sm font-medium text-gray-900 ">Stock</label>
+                                    <input
+                                        type="number"
+                                        id="stock"
+                                        name="stock"
+                                        value={product.stock}
+                                        onChange={handleChange}
+                                        placeholder="stock"
+                                        min="0"
+                                        inputMode="numeric"
+                                        className="rounded-md w-24 mt-1 px-3 py-2 border border-gray-300 bg-[#fff8e7] no-spinner"
                                     />
                                 </div>
                             </div>
