@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound.jsx'
 import Register from './pages/Register.jsx';
 import Sell from "./pages/Sell.jsx";
 import ManageProduct from "./pages/ManageProduct.jsx";
+import PaymentPage from "./pages/Payment.jsx";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<Register />} />
       <Route path='/manageproduct' element={<ManageProduct />} />
+      <Route path="/payment" element={<PaymentPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
 

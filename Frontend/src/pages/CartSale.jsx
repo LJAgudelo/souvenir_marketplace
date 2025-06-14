@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
 import { CartContext } from "../context/cartContext.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import  Sidebar  from "../components/layout/Sidebar.jsx";
 import  Footer  from "../components/layout/Footer.jsx";
 
 function CartPage() {
   const { cartItems, removeFromCart } = useContext(CartContext);
+
+  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -39,7 +42,20 @@ function CartPage() {
         </div>
       </div>
     )}
-  </div>
+      </div>
+                      
+          <div className="w-full max-w-3xl mt-6 flex flex-col items-end gap-4">
+              <p className="text-xl font-semibold">
+                Total a pagar: <span className="text-green-700">${total.toFixed(2)}</span>
+              </p>
+            <button
+              className="bg-[#2a593b] hover:bg-green-700 text-white px-6 py-3 rounded transition disabled:bg-gray-400"
+              disabled={cartItems.length === 0}
+              onClick={() => navigate("/payment")} 
+            >
+              Pagar
+            </button>
+        </div>
 </main>
 
       </div>
