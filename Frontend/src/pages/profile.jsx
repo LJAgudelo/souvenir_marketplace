@@ -17,15 +17,16 @@ const Profile = () => {
 
     const storedUser = JSON.parse(localStorage.getItem('user'));
     console.log(storedUser)
-    
+
     if (storedUser) {
       setUserData({
         name: storedUser.usuario.name || '',
         last_name: storedUser.usuario.last_name || '',
         email: storedUser.usuario.email || '',
         id_users: storedUser.usuario.id_users || 'No disponible',
-        loading: true, 
-      })}
+        loading: true,
+      })
+    }
 
     const fetchUserProfile = async () => {
       try {
@@ -50,7 +51,7 @@ const Profile = () => {
     fetchUserProfile();
   }, []);
 
-  
+
   return (
     <div className="flex flex-col min-h-screen">
       <Sidebar />
@@ -117,7 +118,7 @@ const Profile = () => {
             </div>
 
             <div>
-              <ButtonLogOut />              
+              <ButtonLogOut />
             </div>
           </div>
 

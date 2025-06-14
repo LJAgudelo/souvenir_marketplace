@@ -16,6 +16,7 @@ const Navbar = () => {
     { name: 'E-commerce', to: '/cart' },
     { name: 'Profile', to: '/profile' },
     { name: 'Sell', to: '/sell' },
+    { name: 'Manage Product', to: '/manageproduct' },
     { name: 'Sign Up', to: '' }
   ];
 

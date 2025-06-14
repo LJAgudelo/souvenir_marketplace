@@ -7,6 +7,7 @@ import { LiaMoneyBillWaveSolid } from "react-icons/lia";
 import { PiSignOut } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { MdOutlineManageAccounts } from "react-icons/md";
 
 
 import Navbar from './Navbar.jsx';
@@ -57,6 +58,12 @@ const Sidebar = () => {
                             <Link to="/sell" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
                                 <LiaMoneyBillWaveSolid />
                                 <span className="flex-1 ms-3 whitespace-nowrap">Sell</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/manageproduct" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
+                                <MdOutlineManageAccounts />
+                                <span className="flex-1 ms-3 whitespace-nowrap">Manage Product</span>
                             </Link>
                         </li>
                         <li>

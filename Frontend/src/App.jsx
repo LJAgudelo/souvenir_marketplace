@@ -11,6 +11,7 @@ import LoginPage from './pages/Login.jsx';
 import NotFound from './pages/NotFound.jsx'
 import Register from './pages/Register.jsx';
 import Sell from "./pages/Sell.jsx";
+import ManageProduct from "./pages/ManageProduct.jsx";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       <Route path="/sell" element={<Sell />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<Register />} />
+      <Route path='/manageproduct' element={<ManageProduct />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
 
