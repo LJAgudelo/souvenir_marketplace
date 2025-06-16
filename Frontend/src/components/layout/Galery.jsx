@@ -24,7 +24,7 @@ const Galery = () => {
       Elige tu Producto
     </h2>
     <div className="flex flex-wrap bg-[#f2b035] justify-center gap-6 p-6">
-      {products.map(({ id_product, image_url, name }) => (
+      {products.slice(0, 4).map(({ id_product, image_url, name }) => (
         <img
           key={id_product}
           src={`http://localhost:4001${image_url}`}

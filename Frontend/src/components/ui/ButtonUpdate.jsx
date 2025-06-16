@@ -1,8 +1,11 @@
 import React from 'react'
 
-const ButtonUpdate = () => {
+const ButtonUpdate = ({ onClick }) => {
     return (
-        <button className="bg-[var(--createdOrangeOther)] hover:bg-[var(--createdlightYellow)] active:bg-[var(--createdOrange)] 
+        <button
+            type='button'
+            onClick={onClick}
+            className="bg-[var(--createdOrange)] hover:bg-[var(--createdlightYellow)] active:bg-[var(--createdBrownB)] 
     px-3 py-1 text-sm
     w-[100px] sm:w-[100px] md:w-[100px] lg:w-[110px]
     rounded-lg

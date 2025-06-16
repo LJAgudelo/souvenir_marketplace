@@ -1,9 +1,12 @@
 
 import React from 'react'
 
-const ButtonSearch = () => {
+const ButtonSearch = ({ onClick }) => {
     return (
-        <button className="bg-[var(--createdGreen))] hover:bg-[var(--createdlightYellow)] 
+        <button
+            type='button'
+            onClick={onClick}
+            className="bg-[var(--createdGreen))] hover:bg-[var(--createdBrownB)] 
     px-3 py-1 text-sm
     w-[100px] sm:w-[100px] md:w-[100px] lg:w-[110px]
     rounded-lg
