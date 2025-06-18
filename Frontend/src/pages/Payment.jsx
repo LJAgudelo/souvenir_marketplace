@@ -1,11 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../context/cartContext";
+
 
 function PaymentPage() {
   const navigate = useNavigate();
-
+  const { clearCart } = useContext(CartContext);
   const handlePayment = () => {
     alert("Pago simulado con éxito. Gracias por tu compra!");
+    clearCart();
     navigate("/profile"); 
   };
 
