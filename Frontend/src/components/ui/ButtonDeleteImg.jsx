@@ -3,10 +3,17 @@ const ButtonDeleteImg = ({ onClick }) => {
   return (
     <button
       type="button"
-      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-4"
+      className="bg-[var(--createdRed))] hover:bg-[var(--createdlightYellow)] active:bg-[var(--createdBrownB)] 
+    px-3 py-1 text-sm
+    w-[100px] sm:w-[100px] md:w-[100px] lg:w-[110px]
+    rounded-lg
+    flex items-center justify-center
+    text-white
+    transition-all duration-300 ease-in-out
+"
       onClick={onClick}
     >
-      Eliminar 
+      Eliminar
     </button>
   );
 };
