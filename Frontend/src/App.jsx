@@ -13,25 +13,29 @@ import Register from './pages/Register.jsx';
 import Sell from "./pages/Sell.jsx";
 import ManageProduct from "./pages/ManageProduct.jsx";
 import PaymentPage from "./pages/Payment.jsx";
+import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 
 
 function App() {
   return (
 
     <Routes>
+       {/* rutas publicas */}
       <Route path="/" element={<Home />} />
-      <Route path="/product" element={<AllProducts />} />
-      <Route path="/offert" element={<OfertProduct />} />
-      <Route path="/featured" element={<FeaturedProduct />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/sell" element={<Sell />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<Register />} />
-      <Route path='/manageproduct' element={<ManageProduct />} />
-      <Route path="/payment" element={<PaymentPage />} />
       <Route path="*" element={<NotFound />} />
+
+    {/* rutas privadas solo con token valido*/}
+      <Route path="/product" element={<ProtectedRoute><AllProducts /></ProtectedRoute>} />
+      <Route path="/offert" element={<ProtectedRoute><OfertProduct /></ProtectedRoute>} />
+      <Route path="/featured" element={<ProtectedRoute><FeaturedProduct /></ProtectedRoute>} />
+      <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/sell" element={<ProtectedRoute><Sell /></ProtectedRoute>} />
+      <Route path='/manageproduct' element={<ProtectedRoute><ManageProduct /></ProtectedRoute>} />
+      <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
+      
     </Routes>
 
   );

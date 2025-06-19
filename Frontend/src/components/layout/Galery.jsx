@@ -29,7 +29,8 @@ const Galery = () => {
           key={id_product}
           src={`http://localhost:4001${image_url}`}
           alt={name}
-          onClick={() => navigate("/register")}
+          onClick={() => { window.scrollTo(0, 0); navigate("/login")}}
+          
           className="w-44 h-44 object-cover rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
         />
       ))}

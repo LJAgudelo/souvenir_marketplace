@@ -67,7 +67,7 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/home" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
+                            <Link to="/" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
                                 <PiSignOut />
                                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
                             </Link>
