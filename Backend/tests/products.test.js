@@ -1,5 +1,7 @@
 import request from "supertest";
 import app from "../server.js";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.test" });
 
 describe("GET /product", () => {
   let token;
@@ -7,7 +9,7 @@ describe("GET /product", () => {
   // Ejecutar antes de los tests: hacer login para obtener el token
   beforeAll(async () => {
     const loginResponse = await request(app).post("/login").send({
-      email: "leidy1750301055060@test.com",
+      email: "leidy175030105506@test.com",
       password: "123456",
     });
 
