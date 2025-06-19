@@ -9,16 +9,17 @@ import {
   getProductById,
 } from "../controllers/productsControllers.js";
 import upload from "../middlewares/upload.js";
+import authMiddleware from "../middlewares/middlewareRoutes.js";
 
 const router = express.Router();
 
-router.get("/", getProducts);
-router.get("/offert", getOffert);
-router.get("/featured", getFeatured);
-router.post("/", upload.single("image"), newProduct);
-router.delete("/:id", deleteProduct);
+router.get("/", authMiddleware, getProducts);
+router.get("/offert",authMiddleware, getOffert);
+router.get("/featured",authMiddleware, getFeatured);
+router.post("/", upload.single("image"),authMiddleware, newProduct);
+router.delete("/:id",authMiddleware, deleteProduct);
 //rutas para la vista de administrador
-router.get("/:id", getProductById);
-router.put("/:id", upload.single("image"), updateProduct);
+router.get("/:id", authMiddleware,getProductById);
+router.put("/:id", upload.single("image"),authMiddleware, updateProduct);
 
 export default router;
