@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { IoMenu } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useContext(UserContext);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const isAdmin = user?.role_id === 1;
 
   const links = [
     { name: 'Offers', to: '/offert' },
@@ -16,7 +19,7 @@ const Navbar = () => {
     { name: 'E-commerce', to: '/cart' },
     { name: 'Profile', to: '/profile' },
     { name: 'Sell', to: '/sell' },
-    { name: 'Manage Product', to: '/manageproduct' },
+    ...(isAdmin ? [{ name: 'Manage Product', to: '/manageproduct' }] : []),
     { name: 'Sign Up', to: '' }
   ];
 
