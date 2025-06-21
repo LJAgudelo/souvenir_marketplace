@@ -28,7 +28,10 @@ const login_user = async (req, res) => {
       throw { code: 400, message: "La contraseña es incorrecta." };
     }
 
-    const token = Jwt.sign({ email }, process.env.JWT_PASSWORD);
+    const token = Jwt.sign({ 
+    id: user.id_users,
+    email: user.email,
+    role_id: user.role_id }, process.env.JWT_PASSWORD);
 
     res.status(200).json({
       token: token,

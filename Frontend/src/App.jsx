@@ -14,6 +14,7 @@ import Sell from "./pages/Sell.jsx";
 import ManageProduct from "./pages/ManageProduct.jsx";
 import PaymentPage from "./pages/Payment.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
+import AdminRoute from "./routes/AdminRoutes.jsx";
 
 
 function App() {
@@ -33,7 +34,8 @@ function App() {
       <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/sell" element={<ProtectedRoute><Sell /></ProtectedRoute>} />
-      <Route path='/manageproduct' element={<ProtectedRoute><ManageProduct /></ProtectedRoute>} />
+      {/* <Route path='/manageproduct' element={<ProtectedRoute><ManageProduct /></ProtectedRoute>} /> */}
+      <Route path="/manageproduct" element={<AdminRoute><ManageProduct /></AdminRoute>} />
       <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
       
     </Routes>
