@@ -20,6 +20,7 @@ const ManageProduct = () => {
     });
 
     const [previewImage, setPreviewImage] = useState(null);
+    const [originalImageUrl, setOriginalImageUrl] = useState(null); // NUEVO
     const { token } = useContext(UserContext);
 
     const handleChange = (e) => {
@@ -41,6 +42,7 @@ const ManageProduct = () => {
     const handleRemovePreview = () => {
         setPreviewImage(null);
         setProduct({ ...product, image: null });
+        setOriginalImageUrl(null); // si la elimina manualmente, también borramos la URL original
     };
 
     const handleSearch = async () => {
@@ -57,9 +59,16 @@ const ManageProduct = () => {
                 description: data.description,
                 featured: data.is_featured || false,
                 offer: data.is_offer || false,
-                image: null
+                image: null // no cargamos el archivo como tal
             });
-            setPreviewImage(data.image_url ? `http://localhost:4001${data.image_url}` : null);
+            if (data.image_url) {
+                const fullUrl = `http://localhost:4001${data.image_url}`;
+                setPreviewImage(fullUrl);
+                setOriginalImageUrl(data.image_url); // guardamos la ruta relativa original
+            } else {
+                setPreviewImage(null);
+                setOriginalImageUrl(null);
+            }
         } catch (err) {
             console.error(err);
             alert('Producto no encontrado');
@@ -83,6 +92,7 @@ const ManageProduct = () => {
                 image: null
             });
             setPreviewImage(null);
+            setOriginalImageUrl(null);
         } catch (err) {
             console.error(err);
             alert('Error al eliminar');
@@ -101,9 +111,8 @@ const ManageProduct = () => {
 
             if (product.image instanceof File) {
                 formData.append('image', product.image);
-            } else if (previewImage) {
-                const imagePath = previewImage.replace('http://localhost:4001', '');
-                formData.append('image_url', imagePath);
+            } else if (originalImageUrl) {
+                formData.append('image_url', originalImageUrl); // enviamos la url previa si no cambió
             }
 
             await axios.put(`http://localhost:4001/product/${product.id}`, formData, {
@@ -114,6 +123,7 @@ const ManageProduct = () => {
             });
 
             alert('Producto actualizado');
+
             setProduct({
                 id: '',
                 name: '',
@@ -125,6 +135,7 @@ const ManageProduct = () => {
                 image: null
             });
             setPreviewImage(null);
+            setOriginalImageUrl(null);
         } catch (err) {
             console.error(err);
             alert('Error al actualizar producto');
@@ -138,14 +149,10 @@ const ManageProduct = () => {
                 <div className="space-y-12 px-4 py-1 sm:px-6 lg:px-8">
                     <div className="border-b border-gray-900/10 pb-12">
                         <h3 className="text-3xl font-bold mb-10 text-center">Admin - Manage Product</h3>
-
-                        {/* Sección con 2 columnas: form + foto */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-                            {/* FORMULARIO A LA IZQUIERDA */}
                             <div className="space-y-6">
                                 <div>
-                                    <label htmlFor="IdProduct" className="block text-sm font-medium text-gray-900 ">Id Product</label>
+                                    <label className="block text-sm font-medium text-gray-900">Id Product</label>
                                     <input
                                         type="number"
                                         name="id"
@@ -156,7 +163,7 @@ const ManageProduct = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="product-name" className="block text-sm font-medium text-gray-900 ">Product name</label>
+                                    <label className="block text-sm font-medium text-gray-900">Product name</label>
                                     <input
                                         type="text"
                                         name="name"
@@ -167,7 +174,7 @@ const ManageProduct = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="price" className="block text-sm font-medium text-gray-900">Price US$</label>
+                                    <label className="block text-sm font-medium text-gray-900">Price US$</label>
                                     <input
                                         type="number"
                                         name="price"
@@ -178,7 +185,7 @@ const ManageProduct = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="stockAvailable" className="block text-sm font-medium text-gray-900">Stock available</label>
+                                    <label className="block text-sm font-medium text-gray-900">Stock available</label>
                                     <input
                                         type="number"
                                         name="stock"
@@ -189,7 +196,7 @@ const ManageProduct = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="description" className="block text-sm font-medium text-gray-900">Product description</label>
+                                    <label className="block text-sm font-medium text-gray-900">Product description</label>
                                     <textarea
                                         name="description"
                                         value={product.description}
@@ -222,8 +229,7 @@ const ManageProduct = () => {
                                 </div>
                             </div>
                             <div>
-                                <label htmlFor="image" className="block text-sm font-medium text-gray-900">Product photo</label>
-
+                                <label className="block text-sm font-medium text-gray-900">Product photo</label>
                                 <div className="mt-4 flex justify-center items-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 bg-[#fff8e7]">
                                     {previewImage ? (
                                         <img
@@ -254,7 +260,7 @@ const ManageProduct = () => {
                                         </div>
                                     )}
                                 </div>
-                                {previewImage && ( // este boton solo se activa cuando hay img y permite eliminarla
+                                {previewImage && (
                                     <button
                                         type="button"
                                         onClick={handleRemovePreview}
@@ -264,25 +270,18 @@ const ManageProduct = () => {
                                     </button>
                                 )}
                                 <div className="flex justify-between px-5 py-5">
-
                                     <ButtonSearch onClick={handleSearch} />
                                     <ButtonUpdate onClick={handleUpdate} />
                                     <ButtonDelete onClick={handleDelete} />
                                 </div>
-
-
-
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </form>
             <Footer />
         </div>
+    );
+};
 
-    )
-}
-
-export default ManageProduct
+export default ManageProduct;

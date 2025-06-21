@@ -83,15 +83,28 @@ const newProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, stock } = req.body;
+    const {
+      name,
+      description,
+      price,
+      stock,
+      offer,
+      featured,
+      image_url: bodyImageUrl,
+    } = req.body;
 
-    const is_offer = req.body.offer === "true" || req.body.offer === true;
-    const is_featured =
-      req.body.featured === "true" || req.body.featured === true;
+    const is_offer = offer === "true" || offer === true;
+    const is_featured = featured === "true" || featured === true;
 
+    // Determinar la imagen final: nueva o anterior
     let image_url = null;
+
     if (req.file) {
+      // Imagen nueva subida
       image_url = `/uploads/${req.file.filename}`;
+    } else if (bodyImageUrl) {
+      // Imagen anterior (enviada desde el frontend)
+      image_url = bodyImageUrl;
     }
 
     const result = await modifyProduct(id, {
@@ -99,17 +112,19 @@ const updateProduct = async (req, res) => {
       description,
       price,
       stock,
-      image_url,
       is_offer,
       is_featured,
+      ...(image_url && { image_url }), // Solo agregar si existe
     });
 
-    if (result)
+    if (result) {
       res.status(200).json({ message: "Producto actualizado con éxito" });
-    else res.status(400).json({ error: "No se pudo actualizar el producto" });
+    } else {
+      res.status(400).json({ error: "No se pudo actualizar el producto" });
+    }
   } catch (error) {
     console.log("Datos recibidos:", req.body);
-    console.error("error en update Product", error.message);
+    console.error("Error en updateProduct:", error.message);
     res.status(500).json({ error: "Error al actualizar el producto" });
   }
 };
