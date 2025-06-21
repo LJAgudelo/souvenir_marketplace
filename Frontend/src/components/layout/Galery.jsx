@@ -23,18 +23,18 @@ const Galery = () => {
     <><h2 className="text-3xl font-bold bg-[#f2b035] text-center text-gray-800">
       Elige tu Producto
     </h2>
-    <div className="flex flex-wrap bg-[#f2b035] justify-center gap-6 p-6">
-      {products.slice(0, 4).map(({ id_product, image_url, name }) => (
-        <img
-          key={id_product}
-          src={`http://localhost:4001${image_url}`}
-          alt={name}
-          onClick={() => { window.scrollTo(0, 0); navigate("/login")}}
-          
-          className="w-44 h-44 object-cover rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
-        />
-      ))}
-    </div>
+      <div className="flex flex-wrap bg-[#f2b035] justify-center gap-6 p-6">
+        {products.slice(0, 4).map(({ id_product, image_url, name }) => (
+          <img
+            key={id_product}
+            src={`http://localhost:4001${image_url}`}
+            alt={name}
+            onClick={() => { window.scrollTo(0, 0); navigate("/login") }}
+
+            className="w-44 h-44 object-cover rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
+          />
+        ))}
+      </div>
     </>
   );
 };
