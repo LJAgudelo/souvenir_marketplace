@@ -48,6 +48,11 @@ const newProduct = async (req, res) => {
   console.log("req.file:", req.file);
   try {
     const { name, description, price, stock } = req.body;
+    if (!name || !description || !price || !stock) {
+      return res
+        .status(400)
+        .json({ error: "Todos los campos son obligatorios" });
+    }
     let image_url = null;
     if (req.file) {
       image_url = `/uploads/${req.file.filename}`;
@@ -63,12 +68,14 @@ const newProduct = async (req, res) => {
       image_url
     );
 
-    if (result)
-      res.status(201).json({ mensaje: "Producto insertado con exito" });
-    else res.status(400).json({ error: " no se pudo insertar el producto" });
+    if (result) {
+      res.status(201).json({ mensaje: "Producto insertado con éxito" });
+    } else {
+      res.status(400).json({ error: "No se pudo insertar el producto" });
+    }
   } catch (error) {
-    console.error("Error en agregar el producto", error.message);
-    res.status(500).json({ error: "error al instertar el producto" });
+    console.error("Error en agregar el producto:", error.message);
+    res.status(500).json({ error: "Error interno al insertar el producto" });
   }
 };
 
