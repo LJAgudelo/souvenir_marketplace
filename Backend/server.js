@@ -15,9 +15,10 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/product", productsRoutes);
 app.use("/", userRoutes);
 
+let server;
 if (process.env.NODE_ENV !== "test") {
-  app.listen(process.env.PORT, () => {
+  server = app.listen(process.env.PORT || 4001, () => {
     console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
   });
 }
-export default app;
+export { app, server };
