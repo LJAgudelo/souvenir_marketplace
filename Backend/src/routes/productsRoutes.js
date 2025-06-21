@@ -10,6 +10,7 @@ import {
 } from "../controllers/productsControllers.js";
 import upload from "../middlewares/upload.js";
 import authMiddleware from "../middlewares/middlewareRoutes.js";
+import adminMiddleware from "../middlewares/middlewareAdmin.js";
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.get("/featured",authMiddleware, getFeatured);
 router.post("/", upload.single("image"),authMiddleware, newProduct);
 router.delete("/:id",authMiddleware, deleteProduct);
 //rutas para la vista de administrador
-router.get("/:id", authMiddleware,getProductById);
-router.put("/:id", upload.single("image"),authMiddleware, updateProduct);
+router.get("/:id", authMiddleware,adminMiddleware,getProductById);
+router.put("/:id", upload.single("image"),authMiddleware,adminMiddleware, updateProduct);
 
 export default router;
