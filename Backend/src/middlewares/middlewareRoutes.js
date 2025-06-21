@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
 
   if (!token) return res.status(401).json({ message: "Token missing" });
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_PASSWORD, (err, user) => {
     if (err) return res.status(403).json({ message: "Invalid token" });
 
     req.user = user; // opcional: pasás info a la ruta
