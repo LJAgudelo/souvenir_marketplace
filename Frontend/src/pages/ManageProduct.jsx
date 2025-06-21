@@ -1,38 +1,35 @@
-import React, { useState } from 'react'
-import Sidebar from '../components/layout/Sidebar.jsx'
-import Footer from '../components/layout/Footer.jsx'
-import axios from 'axios'
-import ButtonDelete from '../components/ui/ButtonDelete.jsx'
-import ButtonSearch from '../components/ui/ButtonSearch.jsx'
-import ButtonUpdate from '../components/ui/ButtonUpdate.jsx'
+import React, { useState, useContext } from 'react';
+import Sidebar from '../components/layout/Sidebar.jsx';
+import Footer from '../components/layout/Footer.jsx';
+import axios from 'axios';
+import ButtonDelete from '../components/ui/ButtonDelete.jsx';
+import ButtonSearch from '../components/ui/ButtonSearch.jsx';
+import ButtonUpdate from '../components/ui/ButtonUpdate.jsx';
+import { UserContext } from '../context/userContext.jsx';
 
 const ManageProduct = () => {
-
-    const [product, setProduct] = useState(
-        {
-            id: '',
-            name: '',
-            price: '',
-            stock: '',
-            description: '',
-            featured: false,
-            offer: false,
-            image: null
-        }
-    )
+    const [product, setProduct] = useState({
+        id: '',
+        name: '',
+        price: '',
+        stock: '',
+        description: '',
+        featured: false,
+        offer: false,
+        image: null
+    });
 
     const [previewImage, setPreviewImage] = useState(null);
+    const { token } = useContext(UserContext);
 
-    // Para el manejo de los cambios en inputs
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setProduct({
             ...product,
             [name]: type === 'checkbox' ? checked : value
-        })
-    }
+        });
+    };
 
-    // para manejar la imgaen
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -41,16 +38,16 @@ const ManageProduct = () => {
         }
     };
 
-    // funcion para remover la imagen
     const handleRemovePreview = () => {
         setPreviewImage(null);
         setProduct({ ...product, image: null });
     };
 
-    // Buscar producto por ID
     const handleSearch = async () => {
         try {
-            const res = await axios.get(`http://localhost:4001/product/${product.id}`);
+            const res = await axios.get(`http://localhost:4001/product/${product.id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             const data = res.data;
             setProduct({
                 id: product.id,
@@ -62,22 +59,18 @@ const ManageProduct = () => {
                 offer: data.is_offer || false,
                 image: null
             });
-            if (data.image_url) {
-                setPreviewImage(`http://localhost:4001${data.image_url}`);
-            } else {
-                setPreviewImage(null);
-            }
-
+            setPreviewImage(data.image_url ? `http://localhost:4001${data.image_url}` : null);
         } catch (err) {
             console.error(err);
             alert('Producto no encontrado');
         }
     };
 
-    // Eliminar producto
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:4001/product/${product.id}`);
+            await axios.delete(`http://localhost:4001/product/${product.id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             alert('Producto eliminado');
             setProduct({
                 id: '',
@@ -95,7 +88,7 @@ const ManageProduct = () => {
             alert('Error al eliminar');
         }
     };
-    // Actualizar producto
+
     const handleUpdate = async () => {
         try {
             const formData = new FormData();
@@ -106,17 +99,17 @@ const ManageProduct = () => {
             formData.append('featured', product.featured);
             formData.append('offer', product.offer);
 
-            // consulta la img si no cambia conserva la anterior
             if (product.image instanceof File) {
-                formData.append("image", product.image);
+                formData.append('image', product.image);
             } else if (previewImage) {
-                const imagePath = previewImage.replace("http://localhost:4001", "");
-                formData.append("image_url", imagePath);
+                const imagePath = previewImage.replace('http://localhost:4001', '');
+                formData.append('image_url', imagePath);
             }
 
             await axios.put(`http://localhost:4001/product/${product.id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
                 }
             });
 
@@ -131,6 +124,7 @@ const ManageProduct = () => {
                 offer: false,
                 image: null
             });
+            setPreviewImage(null);
         } catch (err) {
             console.error(err);
             alert('Error al actualizar producto');
