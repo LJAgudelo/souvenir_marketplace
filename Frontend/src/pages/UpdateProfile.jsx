@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import countriesData from '../data/countries.json';
 import ButtonSend from '../components/ui/ButtonSend.jsx';
 import ButtonCancel from '../components/ui/ButtonCancel.jsx';
-import ButtonLogout from '../components/ui/ButtonLogOut.jsx';
+
 
 const UpdateProfile = () => {
   const { user, logout, validatePhone } = useContext(UserContext);
@@ -22,13 +22,13 @@ const UpdateProfile = () => {
   const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
-    if (!user || !user.id_users) {      
+    if (!user || !user.id_users) {
       navigate('/login');
       return;
     }
     setCountries(countriesData);
     const fetchProfile = async () => {
-      try {        
+      try {
         const res = await fetch(`http://localhost:4001/profile/${user.id_users}`);
         if (!res.ok) {
           console.error('Error al obtener perfil, status:', res.status);
@@ -58,7 +58,7 @@ const UpdateProfile = () => {
     fetchProfile();
   }, [user, navigate]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (!user) {
       navigate('/login');
     }
@@ -67,7 +67,7 @@ const UpdateProfile = () => {
   if (!user) {
     return <div className="text-center p-6">Redirigiendo al login...</div>;
   }
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -80,10 +80,10 @@ const UpdateProfile = () => {
       setPreviewImage(URL.createObjectURL(file));
     }
   };
-     
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!user.id_users) return;
     if (formData.phone && !validatePhone(formData.phone)) return;
 
@@ -112,7 +112,7 @@ const UpdateProfile = () => {
       }
     } catch (err) {
       console.error('Error en update-profile:', err);
-      toast.error('Error de conexión con el servidor.',err);
+      toast.error('Error de conexión con el servidor.', err);
     }
   };
 
@@ -122,25 +122,33 @@ const UpdateProfile = () => {
 
   return (
     <>
-      <ToastContainer />      
-      <div className="flex flex-col min-h-screen">
-        <main className="flex-1 bg-[#f9e5bb] ml-0 lg:ml-[220px] transition-all duration-300">
-          <div className="max-w-3xl mx-auto bg-[var(--createdlightYellow)] rounded-lg shadow-lg p-6">
-            <h1 className="text-2xl font-bold mb-4 text-[#3d2f1d]">Modificar Perfil</h1>
+      <div className="flex min-h-[calc(100vh-80px)]">
+        {/* Imagen lateral izquierda */}
+        <div className="hidden lg:flex w-1/3 bg-[#fcebbd]">
+          <img
+            src="/src/assets/images/updateProfile.png"
+            alt="Banner perfil"
+            className="w-full object-cover"
+          />
+        </div>
+
+        {/* Contenido del formulario */}
+        <div className="flex-1 bg-[var(--createdlightYellow)] flex items-center justify-center">
+          <ToastContainer />
+          <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6 my-10">
+            <h1 className="text-2xl font-bold mb-4 text-[#3d2f1d]">Modify Profile</h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Preview de imagen */}
+              {/* Imagen del perfil */}
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-yellow-700 mb-2">
-                  {previewImage
-                    ? <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
-                    : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        {/* icono genérico */}
-                        <span className="text-gray-500 text-2xl">👤</span>
-                      </div>
-                    )
-                  }
+                  {previewImage ? (
+                    <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-500 text-2xl">👤</span>
+                    </div>
+                  )}
                 </div>
                 <input
                   type="file"
@@ -163,26 +171,24 @@ const UpdateProfile = () => {
                 />
               </div>
 
-              {/* Campo: País */}
-                  <div className="mb-4">
-                    <label htmlFor="country"  className="block text-sm font-medium mb-1">
-                      País
-                    </label>
-                    <select
-                      name="country"
-                      id="country"
-                      value={formData.country}
-                      onChange={handleChange}                      
-                      className="w-full px-4 py-2 border bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                    >
-                      <option value="">Selecciona un país</option>
-                      {countries.map((country) => (
-                        <option key={country.name} value={country.name}>
-                          {country.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              {/* País */}
+              <div>
+                <label htmlFor="country" className="block text-sm font-medium mb-1">País</label>
+                <select
+                  name="country"
+                  id="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                >
+                  <option value="">Selecciona un país</option>
+                  {countries.map((country) => (
+                    <option key={country.name} value={country.name}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               {/* Dirección */}
               <div>
@@ -201,13 +207,14 @@ const UpdateProfile = () => {
               <div className="flex space-x-4 mt-4 justify-center">
                 <ButtonSend />
                 <ButtonCancel onClick={handleCancel} />
-                <ButtonLogout onClick={logout}/>                
               </div>
             </form>
           </div>
-        </main>
-        <Footer />
+        </div>
       </div>
+
+      {/* Footer separado del contenido principal */}
+      <Footer />
     </>
   );
 };
