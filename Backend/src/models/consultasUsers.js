@@ -65,35 +65,30 @@ const getProfileUser = async (id_profile) => {
   }
 }; 
 
-const updateProfile_User = async (req, res) => {
+const updateProfileUser = async (profileusers_id, phone, country, address, image_url) => {
   try {
-    const { profileusers_id, phone, country, address, image, password } = req.body;
-    let passwordEncrypted;
-
-    if (password) {
-      passwordEncrypted = await bcrypt.hash(password, 10);
-    }
-    let image_url = null;
-    if (req.file) {
-      image_url = `/uploads/profile/${req.file.filename}`;
-    }
-
-    const result = await consultasUsers.updateProfileUser (profileusers_id, phone, country, address, image_url, passwordEncrypted);
-    if (!result) {
-      throw { code: 400, message: 'Actualización del usuario fallida.' };
-    }
-
-    res.status(200).json({ ok: true,  user: result, message: 'Actualización del usuario exitoso.' });
-  } catch (error) {
-    const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
-    res.status(status).json({ ok: false, message:  error.message });
-  }
+    const consulta = 'UPDATE profile_users SET phone = $2, country = $3, address = $4, image = $5 WHERE profileusers_id = $1';
+    const values = [profileusers_id, phone, country, address, image_url];
+    const { rowCount } = await pool.query(consulta, values);
+    if  (rowCount > 0) {
+      return {
+      id_users: profileusers_id,
+      phone,
+      country,
+      address,
+      image: image_url, 
+    };
+   } 
+    } catch (error) {
+      console.error("Error al modificar el perfil del usuario (updateProfileUser) ", error);
+      throw error;
+    } 
 };
 
-export const userController = {
-  login_user,
-  register_user,  
-  getProfile_User,
-  updateProfile_User,  
+export const consultasUsers = {
+  getUser,
+  checkEmailEnabled,
+  newUser_Profile,
+  getProfileUser,  
+  updateProfileUser
 };
-
