@@ -7,26 +7,38 @@ import FeaturedProduct from "./pages/FeaturedProducts.jsx";
 import CartPage from "./pages/CartSale.jsx";
 import Profile from "./pages/profile.jsx";
 import Home from "./pages/Home.jsx";
-import LoginPage from './pages/login.jsx';
+import LoginPage from './pages/Login.jsx';
 import NotFound from './pages/NotFound.jsx'
-import Register from './pages/register.jsx';
+import Register from './pages/Register.jsx';
 import Sell from "./pages/Sell.jsx";
-
+import ManageProduct from "./pages/ManageProduct.jsx";
+import PaymentPage from "./pages/Payment.jsx";
+import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
+import AdminRoute from "./routes/AdminRoutes.jsx";
+import UpdateProfile from './pages/UpdateProfile.jsx';
 
 function App() {
   return (
 
     <Routes>
-      <Route path="/product" element={<AllProducts />} />
-      <Route path="/offert" element={<OfertProduct />} />
-      <Route path="/featured" element={<FeaturedProduct />} />
-      <Route path="/cart" element={<CartPage />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/sell" element={<Sell />} />
+       {/* rutas publicas */}
+      <Route path="/" element={<Home />} />
       <Route path='/login' element={<LoginPage />} />
       <Route path='/register' element={<Register />} />
       <Route path="*" element={<NotFound />} />
+
+    {/* rutas privadas solo con token valido*/}
+      <Route path="/product" element={<ProtectedRoute><AllProducts /></ProtectedRoute>} />
+      <Route path="/offert" element={<ProtectedRoute><OfertProduct /></ProtectedRoute>} />
+      <Route path="/featured" element={<ProtectedRoute><FeaturedProduct /></ProtectedRoute>} />
+      <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/sell" element={<ProtectedRoute><Sell /></ProtectedRoute>} />
+      {/* <Route path='/manageproduct' element={<ProtectedRoute><ManageProduct /></ProtectedRoute>} /> */}
+      <Route path="/manageproduct" element={<AdminRoute><ManageProduct /></AdminRoute>} />
+      <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
+      <Route path="/updateProfile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+      
     </Routes>
 
   );

@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
-import { CartContext } from "../../context/cartContext"; // Ajusta el path si es necesario
+import { CartContext } from "../../context/cartContext"; 
 
-function CartProduct({ id, name, price, image }) {
+function CartProduct({ id, name, price, image,stock,description }) {
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useContext(CartContext); // ← Importante
+  const { addToCart } = useContext(CartContext); 
 
   const increment = () => setQuantity(quantity + 1);
   const decrement = () => {
@@ -18,6 +18,8 @@ function CartProduct({ id, name, price, image }) {
       name,
       price,
       image,
+      stock,
+      description ,
       quantity,
     });
     alert(`${quantity} x ${name} agregado${quantity > 1 ? 's' : ''} al carrito`);
@@ -31,7 +33,9 @@ function CartProduct({ id, name, price, image }) {
         alt={name}
       />
       <h2 className="text-xl font-semibold mb-2">{name}</h2>
+      <p className="text-gray-600 mb-2">{description}</p>
       <p className="text-gray-700 mb-2">Precio unitario: ${price}</p>
+      <p className="text-gray-600 text-sm mb-1">Stock disponible: {stock}</p>
 
       <div className="flex items-center gap-2 mb-2">
         <button

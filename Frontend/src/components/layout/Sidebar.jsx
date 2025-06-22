@@ -1,4 +1,4 @@
-import React from 'react'
+import React , { useContext } from 'react'
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { AiOutlineProduct } from "react-icons/ai";
 import { BsCartCheck } from "react-icons/bs";
@@ -7,12 +7,15 @@ import { LiaMoneyBillWaveSolid } from "react-icons/lia";
 import { PiSignOut } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { MdOutlineManageAccounts } from "react-icons/md";
 
 
 import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
+import { UserContext } from '../../context/userContext.jsx';
 
 const Sidebar = () => {
+    const { user } = useContext(UserContext);
     return (
         <>
             <aside id="default-sidebar" className="hidden lg:fixed lg:top-0 lg:left-0 lg:z-40 lg:w-55 lg:h-screen lg:transition-transform lg:block" aria-label="Sidebar">
@@ -59,8 +62,16 @@ const Sidebar = () => {
                                 <span className="flex-1 ms-3 whitespace-nowrap">Sell</span>
                             </Link>
                         </li>
+                        {user?.role_id === 1 && (
                         <li>
-                            <Link to="/home" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
+                            <Link to="/manageproduct" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
+                                <MdOutlineManageAccounts />
+                                <span className="flex-1 ms-3 whitespace-nowrap">Manage Product</span>
+                            </Link>
+                        </li>
+                        )}
+                        <li>
+                            <Link to="/" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
                                 <PiSignOut />
                                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
                             </Link>

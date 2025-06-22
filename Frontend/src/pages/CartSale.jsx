@@ -1,32 +1,22 @@
 import React, { useContext } from "react";
 import { CartContext } from "../context/cartContext.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import  Sidebar  from "../components/layout/Sidebar.jsx";
 import  Footer  from "../components/layout/Footer.jsx";
 
 function CartPage() {
   const { cartItems, removeFromCart } = useContext(CartContext);
 
+  const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col min-h-screen">
       <Sidebar></Sidebar>
       <div className="flex flex-1">
-        {/* <aside className="w-64 bg-gray-800 text-white p-6">
-          <h2 className="text-2xl font-bold mb-6">Logo</h2>
-          <nav className="flex flex-col space-y-12">
-           <Link to="/offert" className="hover:text-blue-300">Ofertas</Link>
-            <Link to="/product" className="hover:text-blue-300">Todos los productos</Link>
-            <Link to="/featured" className="hover:text-blue-300">Destacados</Link>
-            <Link to="/cart" className="hover:text-blue-300">Carrito</Link>
-            <Link to="/perfil" className="hover:text-blue-300">Perfil</Link>
-            <Link to="/actualizar" className="hover:text-blue-300">Actualizar Perfil</Link>
-          </nav>
-        </aside> */}
-
        <main className="flex-1 bg-[#f2ddb6] lg:ml-[220px] p-4 md:p-6">
   <div className="w-full flex flex-col items-center justify-center text-center">
     <h1 className="text-3xl font-bold mb-4">Carrito de Compras</h1>
-
     {cartItems.length === 0 ? (
       <p className="text-lg text-gray-600">No hay productos en el carrito.</p>
     ) : (
@@ -52,7 +42,20 @@ function CartPage() {
         </div>
       </div>
     )}
-  </div>
+      </div>
+                      
+          <div className="w-full max-w-3xl mt-6 flex flex-col items-end gap-4">
+              <p className="text-xl font-semibold">
+                Total a pagar: <span className="text-green-700">${total.toFixed(2)}</span>
+              </p>
+            <button
+              className="bg-[#2a593b] hover:bg-green-700 text-white px-6 py-3 rounded transition disabled:bg-gray-400"
+              disabled={cartItems.length === 0}
+              onClick={() => navigate("/payment")} 
+            >
+              Pagar
+            </button>
+        </div>
 </main>
 
       </div>

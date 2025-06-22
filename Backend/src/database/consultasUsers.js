@@ -12,13 +12,7 @@ const checkEmailEnabled = async (email) => {
   return rowCount;
 };
 
-const newUser = async (
-  nombre,
-  last_name,
-  email,
-  password,
-  rol_id = 0
-) => {
+const newUser = async (nombre,  last_name,  email,  password,  rol_id = 0) => {
   const consulta = 'INSERT INTO users values (DEFAULT, $1, $2, $3, $4, $5) RETURNING *;';
   const values = [nombre, last_name, email, password, rol_id];
   const { rows: [user] } = await pool.query(consulta, values);
@@ -32,13 +26,7 @@ const removeUser = async (id_user) => {
   return rowCount;
 };
 
-const newProfileUser = async (
-  id_profile,  
-  phone,
-  country,
-  address,
-  image
-) => {  
+const newProfileUser = async (id_profile, phone, country, address, image) => {  
   const values = [ id_profile, phone, country, address, image];
   const consulta = 'INSERT INTO profile_users values (DEFAULT, $1, $2, $3, $4, $5) RETURNING *;';
   const { rowCount } = await pool.query(consulta, values);

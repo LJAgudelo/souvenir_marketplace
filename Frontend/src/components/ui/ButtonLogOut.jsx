@@ -1,12 +1,14 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { UserContext } from '../../context/userContext.jsx';
+import { toast } from 'react-toastify';
 
-const ButtonLogOut = () => {
-    const navigate = useNavigate();    
-    const handleLogout = () => {    
-    localStorage.removeItem('usuario');    
-    navigate('/product');
-  };
+const ButtonLogOut = () => {   
+     const { logout } = useContext(UserContext);
+
+    const handleLogout = () => {
+      toast.success('Sesión cerrada exitosamente', { autoClose: 2000 });
+      logout();
+    };
 
   return (
     <button

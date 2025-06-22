@@ -10,6 +10,7 @@ const getAllProducts= async() =>{
 //selecciona todos los productos en oferta
 const getAllOffert = async () =>{
     const  {rows}= await pool.query ("SELECT * FROM product WHERE is_offer = TRUE")
+    console.log("Productos en oferta desde la DB:", rows);
     return rows;
 
 }

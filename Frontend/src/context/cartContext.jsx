@@ -6,7 +6,7 @@ export const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
-  // Aquí va la función addToCart que me preguntas:
+  
   function addToCart(product) {
     setCartItems(prevItems => {
       const existing = prevItems.find(item => item.id === product.id);
@@ -25,9 +25,13 @@ export function CartProvider({ children }) {
   function removeFromCart(productId) {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
   }
+  function clearCart() {
+  setCartItems([]);
+  localStorage.removeItem("cart"); 
+}
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart,clearCart }}>
       {children}
     </CartContext.Provider>
   );

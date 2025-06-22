@@ -1,76 +1,82 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FaUser, FaLock } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import loginImage from '../assets/images/main.jpg';
 import Footer from '../components/layout/Footer.jsx';
-import { UserContext } from '../context/userContext.jsx'; 
+import { UserContext } from '../context/userContext.jsx';
+import ButtonLogIn from '../components/ui/ButtonLogIn.jsx';
+import ButtonLogOut from '../components/ui/ButtonLogOut.jsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const URL_SERVER = 'http://localhost:3001/login';
+const URL_SERVER = 'http://localhost:4001/login';
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
-  const [message, setMessage] = useState('');
-  const { login } = useContext(UserContext); // Usa el contexto para obtener la función login
+  const { user, login, logout } = useContext(UserContext);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (user) {
+      toast.info(`Ya has iniciado sesión como ${user.name || user.email || 'usuario'}.`);
+      navigate('/product'); 
+    }
+  }, [user, navigate]);
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
- 
+
   const handleSubmit = async (e) => {
   e.preventDefault();
-  setMessage('');
-
   try {
     const res = await fetch(URL_SERVER, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: form.email,
         password: form.password,
       }),
     });
 
-    if (!res.ok) {
-      throw new Error('Credenciales inválidas o error en el servidor');
+    const data = await res.json(); // solo se puede usar una vez
+    console.log('Login:', data);
+
+    if (!res.ok || !data.ok) {
+      throw new Error(data.message || 'Credenciales inválidas');
     }
 
-    const user = await res.json();
-
-    setMessage(`Bienvenid@, ${user.name}`);
-    login(user);
+    const userData = data;
+    login(userData); // asegúrate que login espera este formato
+    toast.success(`Bienvenid@, ${userData.usuario?.name || userData.usuario?.email}`);
     navigate('/product');
   } catch (error) {
-    console.error(error);
-    setMessage('Correo o contraseña incorrectos');
+    console.error('Login error:', error.message);
+    toast.error(error.message || 'Correo o contraseña incorrectos');
   }
-};
-
+};  
 
   return (
     <>
+      <ToastContainer />
       <div className="min-h-screen flex">
         {/* Lado izquierdo (30%) */}
         <div className="w-[30%] bg-[#f9e5bb] hidden md:flex items-center justify-center">
           <img
             src={loginImage}
             alt="Imagen de souvenir"
-            className="object-cover h-100% w-50%"
+            className="object-cover h-full w-full"
           />
         </div>
-
         {/* Lado derecho (70%) */}
         <div className="w-full md:w-[70%] flex items-center justify-center bg-[#f9e5bb] px-6 py-12">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-md bg-sandybrown-400 p-8 rounded-lg shadow-lg"
+            className="w-full max-w-md bg-sandybrown-200 p-8 rounded-lg shadow-lg"
           >
             <h1 className="text-xl font-bold mb-6 text-center text-gray-800">
               Iniciar Sesión
             </h1>
-
             <div className="mb-6">
               <label htmlFor="email" className="block text-sm font-medium mb-1">
                 Correo Electrónico
@@ -109,33 +115,14 @@ const LoginPage = () => {
               </div>
             </div>
 
-             <button
-              type="submit"
-              className="bg-[var(--createdMustard)] hover:bg-[var(--createdlightYellow)] active:bg-[var(--createdOrange)] 
-                px-4 py-1 text-xs 
-                sm:px-5 sm:py-1 sm:text-sm  
-                md:px-6 md:py-2 md:text-base md:w-[300px]  
-                lg:text-lg lg:w-[350px]      
-                xl:text-xl xl:w-[400px]      
-                rounded-lg 
-                flex items-center justify-center 
-                text-white 
-                transition-all duration-300 ease-in-out"
-            >
-              Iniciar Sesión
-            </button>
-
-
-
-            {message && (
-              <p className="mt-4 text-center text-sm text-red-600">
-                {message}
-              </p>
-            )}
+            <div className="flex justify-center space-x-4 mt-6">
+              <ButtonLogIn />
+              {user && (<ButtonLogOut />)}
+            </div>
 
             <div className="mt-6 text-center">
               <p>
-                ¿No tienes una cuenta?{' '}
+                No tienes una cuenta?{' '}
                 <Link to="/register" className="text-blue-600 hover:underline">
                   Crear cuenta
                 </Link>
@@ -150,3 +137,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
