@@ -1,31 +1,18 @@
-import { Router } from "express";
-import {
-  verifyRegisteredUser,
-  verifyCredentials,
-} from "../middlewares/middlewareUsers.js";
-import { userController } from "../controllers/userController.js";
+import { verifyRegisteredUser, verifyCredentials } from "../middlewares/middlewareUsers.js";
+import { userController } from '../controllers/userController.js';
+import uploadProfile from "../middlewares/uploadProfile.js";
+import express from 'express';
 
-const routerUsers = Router();
+const routerUsers = express.Router();
 
-// RUTAS PUBLICAS
 routerUsers.post("/login", userController.login_user);
-routerUsers.post(
-  "/register",
-  verifyRegisteredUser,
-  userController.register_user
-);
-
-// RUTAS PRIVADAS
+routerUsers.post("/register", uploadProfile.single('image'),verifyRegisteredUser, userController.register_user);
 routerUsers.get("/profile/:usuario_id", userController.getProfile_User);
-routerUsers.put(
-  "/profile",
-  verifyCredentials,
-  verifyRegisteredUser,
-  userController.updateProfile_User
-);
+//routerUsers.get("/UpdateProfile/:usuario_id", userController.getProfile_User);
+routerUsers.post("/UpdateProfile", uploadProfile.single('image'),  userController.updateProfile_User);
 
-routerUsers.all("(.*)", (req, res) => {
-  res.status(404).json({ ok: false, message: "404 Pagina no encontrada." });
+routerUsers.all('(.*)', (req, res) => {
+    res.status(404).json({ ok: false, message: "404 Pagina no encontrada." });
 });
 
 export default routerUsers;
