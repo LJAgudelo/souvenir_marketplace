@@ -33,11 +33,12 @@ const login_user = async (req, res) => {
     email: user.email,
     role_id: user.role_id }, process.env.JWT_PASSWORD);
 
+    const { password: _, ...userWithoutPassword } = user;
     res.status(200).json({
       token: token,
       ok: true,
       message: "Inicio de sesion exitoso.",
-      usuario: user,
+      usuario: userWithoutPassword,
     });
   } catch (error) {
     console.error("Error en login_user:", error);
