@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+
+@layer base {
+    :root {
+        --createdGreen: #2a593b;
+        --createdMustard: #E6B03B;
+        --createdlightYellow: #F2DDB6;
+        --createdBrown: #732A10;
+        --createdBrownB: #260101;
+        --createdRed: #BF2315;
+        --createdOrange: #BF6211;
+        --createdligthYellosW: #fff8e7;
+    }
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
