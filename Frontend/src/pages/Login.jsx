@@ -7,7 +7,6 @@ import { UserContext } from '../context/userContext.jsx';
 import ButtonLogIn from '../components/ui/ButtonLogIn.jsx';
 import ButtonLogOut from '../components/ui/ButtonLogOut.jsx';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const URL_SERVER = 'http://localhost:4001/login';
 
@@ -48,11 +47,9 @@ const LoginPage = () => {
 
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.usuario));
-
-    
-
+   
     const userData = data;
-    login(userData); // asegúrate que login espera este formato
+    login(userData); 
     toast.success(`Bienvenid@, ${userData.usuario?.name || userData.usuario?.email}`);
     navigate('/product');
   } catch (error) {

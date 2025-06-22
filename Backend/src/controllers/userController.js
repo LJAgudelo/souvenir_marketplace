@@ -16,6 +16,7 @@ const login_user = async (req, res) => {
     }
 
     const user = await consultasUsers.getUser(email);
+     console.log("Usuario encontrado:", user);
     if (!user) {
       throw {
         code: 400,
@@ -28,17 +29,22 @@ const login_user = async (req, res) => {
       throw { code: 400, message: "La contraseña es incorrecta." };
     }
 
+    if (!process.env.JWT_PASSWORD) {
+      throw { code: 500, message: "JWT_PASSWORD no está definido en el entorno." };
+    }
+
     const token = Jwt.sign({ 
-    id: user.id_users,
-    email: user.email,
-    role_id: user.role_id }, process.env.JWT_PASSWORD);
+          id: user.id_users,
+          email: user.email,
+          role_id: user.role_id 
+    }, process.env.JWT_PASSWORD);
 
     const { password: _, ...userWithoutPassword } = user;
     res.status(200).json({
       token: token,
       ok: true,
       message: "Inicio de sesion exitoso.",
-      usuario: userWithoutPassword,
+      user: userWithoutPassword,
     });
   } catch (error) {
     console.error("Error en login_user:", error);
@@ -61,6 +67,7 @@ const register_user = async (req, res) => {
       country,
       address,
     } = req.body;
+
     const passwordEncrypted = await bcrypt.hash(password, 10);
 
     const checkEmail = await consultasUsers.checkEmailEnabled(email);
@@ -70,6 +77,7 @@ const register_user = async (req, res) => {
     }
     const image_url = req.file ? `/uploads/profile/${req.file.filename}` : null;
     console.log('URL de imagen:', image_url);
+   
     const resultUser = await consultasUsers.newUser_Profile(name, last_name, email, passwordEncrypted, role_id, phone, country, address, image_url);    
     console.log('Usuario registrado:', resultUser);
     if (!resultUser || !resultUser.profileusers_id ) {
@@ -78,8 +86,7 @@ const register_user = async (req, res) => {
     res.status(201).json({ ok: true, user: resultUser,  message: 'El registro del usuario fue exitoso.' });
   } catch (error) {
      console.error("ERROR REGISTER USER:", error);  
-    const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
-    return res.status(status).json({ ok: false, message:  error.message });
+    return res.status(400).json({ ok: false, message });
   }
 };
 
@@ -95,7 +102,7 @@ const getProfile_User = async (req, res) => {
     }
     res.status(200).json({ ok: true, message: "Perfil encontrado.", perfil: profile });
   } catch (error) {
-    console.error('Error en getProfile_User'.error); 
+    console.error('Error en getProfile_User:', error);
     const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
     res.status(status).json({ ok: false, message:  error.message });
   }
@@ -107,7 +114,7 @@ const updateProfile_User = async (req, res) => {
      if (!profileusers_id) {
       return res.status(400).json({ ok: false, message: 'Falta el ID del usuario.' });
     }
-    let passwordEncrypted;
+    let passwordEncrypted = null;
 
     if (password) {
       passwordEncrypted = await bcrypt.hash(password, 10);
@@ -123,8 +130,10 @@ const updateProfile_User = async (req, res) => {
 
     res.status(200).json({ ok: true,  user: result, message: 'Actualización del usuario exitoso.' });
   } catch (error) {
-    const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
-    res.status(status).json({ ok: false, message:  error.message });
+    console.error("Error en updateProfile_User:", error);
+    const { status = 500, message = "Error interno del servidor" } = handleError(
+            error.code, error.message );
+    res.status(status).json({ ok: false, message });
   }
 };
 
