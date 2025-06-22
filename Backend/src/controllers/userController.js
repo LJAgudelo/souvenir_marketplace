@@ -103,7 +103,7 @@ const getProfile_User = async (req, res) => {
 
 const updateProfile_User = async (req, res) => {
   try {
-    const { profileusers_id, phone, country, address,  password } = req.body;
+    const { profileusers_id, phone, country, address,  password,currentImage  } = req.body;
      if (!profileusers_id) {
       return res.status(400).json({ ok: false, message: 'Falta el ID del usuario.' });
     }
@@ -112,11 +112,11 @@ const updateProfile_User = async (req, res) => {
     if (password) {
       passwordEncrypted = await bcrypt.hash(password, 10);
     }
-    let image_url = null;
+    let image_url = currentImage || null;
     if (req.file) {
       image_url = `/uploads/profile/${req.file.filename}`;
     }
-     const result = await consultasUsers.updateProfileUser (profileusers_id, phone, country, address, image_url, passwordEncrypted);
+     const result = await consultasUsers.updateProfileUser (profileusers_id, phone, country, address, image_url);
     if (!result) {
       throw { code: 400, message: 'Actualización del usuario fallida.' };
     }
@@ -134,3 +134,4 @@ export const userController = {
   getProfile_User,
   updateProfile_User,
 };
+
