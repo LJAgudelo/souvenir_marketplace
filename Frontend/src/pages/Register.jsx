@@ -65,11 +65,10 @@ const RegisterPage = () => {
       const data = await res.json().catch(() => null);
       console.log('Creacion de usuario ', res.status, data);
       if (res.ok && data?.user) {
-        const newUser = data.user;
+        const newUser = data.user;        
+        navigate('/login');
         console.log(`Usuario registrado con el correo: ${newUser.email}`);
         toast.success(`Usuario registrado con el correo: ${newUser.email}`); 
-        login(newUser);
-        navigate('/product');
       } else {
         console.log('Error al registrar el usuario',data?.message);
         toast.error(`Error al registrar el usuario`);
