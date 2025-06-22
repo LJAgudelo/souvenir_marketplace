@@ -13,7 +13,7 @@ const URL_SERVER = 'http://localhost:4001/login';
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
-  const { user, login, logout } = useContext(UserContext);
+  const { user, login } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +45,11 @@ const LoginPage = () => {
     if (!res.ok || !data.ok) {
       throw new Error(data.message || 'Credenciales inválidas');
     }
+
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.usuario));
+
+    
 
     const userData = data;
     login(userData); // asegúrate que login espera este formato

@@ -4,25 +4,26 @@ import { toast } from 'react-toastify';
 
 const UserContext = createContext();
 const DATABASE_URL = 'http://localhost:4001';
-const UserProvider = ({ children }) => {
-const [user, setUser] = useState(null);
-const [token, setToken] = useState(null);
-const [profile, setProfile] = useState(null); 
-const [loading, setLoading] = useState(true);
 
-const navigate = useNavigate();
+const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);            
+  const [profile, setProfile] = useState(null); 
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (email && !emailRegex.test(email)) {
-        toast.error("Por favor ingresa un correo electrónico válido.");
-        return false;
-      }
-      return true;
-    };
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (email && !emailRegex.test(email)) {
+      toast.error("Por favor ingresa un correo electrónico válido.");
+      return false;
+    }
+    return true;
+  };
 
-  const validatePhone = (phone) => {
-    const phoneRegex = /^\+?[\d\-]+$/;
+  const validatePhone = (phone) => {  
+    const phoneRegex = /^\+?[0-9-]+$/;
     if (phone && !phoneRegex.test(phone)) {
       toast.error("El teléfono solo puede contener números, guiones y el símbolo +.");
       return false;
@@ -30,29 +31,39 @@ const navigate = useNavigate();
     return true;
   };
   
- useEffect(() => {
-   const loadUser = async () => {
+  
+  useEffect(() => {
+    const loadUser = async () => {
       try {
-        const stored = localStorage.getItem('user');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          setUser(parsed);
-          await fetchAndSetProfile(parsed.id_users);
+        const storedUser = localStorage.getItem('user');
+        const storedToken = localStorage.getItem('token');      
+        if (storedUser && storedToken) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setToken(storedToken);
+          await fetchAndSetProfile(parsedUser.id_users);
         }
       } catch (error) {
         console.error('Error al cargar usuario desde localStorage:', error);
         localStorage.removeItem('user');
+        localStorage.removeItem('token');                        
       } finally {
         setLoading(false);
       }
     };
     loadUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  
+  const authHeaders = () => token ? { Authorization: `Bearer ${token}` } : {};
 
   const fetchAndSetProfile = async (id_users) => {
     if (!id_users) return;
     try {
-      const res = await fetch(`${DATABASE_URL}/profile/${id_users}`);
+      const res = await fetch(`${DATABASE_URL}/profile/${id_users}`, {
+        headers: authHeaders(),                              
+      });
       if (!res.ok) {
         console.error('Error al obtener perfil:', res.status);
         return;
@@ -68,17 +79,21 @@ const navigate = useNavigate();
     }
   };
 
+  
   const login = async (userData) => {
     setUser(userData.usuario);
-    setToken(userData.token);
+    setToken(userData.token);                            
     localStorage.setItem('user', JSON.stringify(userData.usuario));
-    await fetchAndSetProfile(userData.id_users);
+    localStorage.setItem('token', userData.token);      
+    await fetchAndSetProfile(userData.usuario.id_users);
   };
 
   const logout = () => {   
     setUser(null);
+    setToken(null);                                      
     setProfile(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');                    
     navigate('/login');
     toast.success('La sesión fue cerrada correctamente.');
   };
@@ -88,7 +103,10 @@ const navigate = useNavigate();
     try {
       const res = await fetch(`${DATABASE_URL}/profile/${user.id_users}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...authHeaders(),                                
+        },
         body: JSON.stringify(updatedFields),
       });
       if (!res.ok) {
@@ -111,6 +129,7 @@ const navigate = useNavigate();
 
   const value = {
     user,
+    token,
     profile,
     loading,
     login,
@@ -119,10 +138,11 @@ const navigate = useNavigate();
     updateProfile,
     validateEmail,
     validatePhone,
+    authHeaders,                                       
   };
 
   if (loading) {
-    return  <div>Cargando...</div>;
+    return <div>Cargando...</div>;
   }
 
   return (

@@ -22,7 +22,7 @@ const Sidebar = () => {
                 <div className="h-full px-2 py-3 overflow-hidden bg-[var(--createdMustard)]">
                     <ul className="space-y-1 font-medium">
                         <li>
-                            <Link to="/home" className="flex items-center p-1  rounded-lg  ">
+                            <Link to="/" className="flex items-center p-1  rounded-lg  ">
                                 <img src="/src/assets/images/logo.png" alt="Logo" className="w-45 rounded-sm" />
                             </Link>
                         </li>

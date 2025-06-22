@@ -26,7 +26,7 @@ const NotFoundPage = () => {
               Sorry, the page you're looking for doesn't exist.
             </p>
             <Link
-              to="/home"
+              to="/profile"
               className="inline-block px-6 py-2 text-white bg-green-700 rounded hover:bg-green-800 transition"
             >
               return to the home page
