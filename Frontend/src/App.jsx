@@ -15,7 +15,7 @@ import ManageProduct from "./pages/ManageProduct.jsx";
 import PaymentPage from "./pages/Payment.jsx";
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 import AdminRoute from "./routes/AdminRoutes.jsx";
-
+import UpdateProfile from './pages/UpdateProfile.jsx';
 
 function App() {
   return (
@@ -37,6 +37,7 @@ function App() {
       {/* <Route path='/manageproduct' element={<ProtectedRoute><ManageProduct /></ProtectedRoute>} /> */}
       <Route path="/manageproduct" element={<AdminRoute><ManageProduct /></AdminRoute>} />
       <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
+      <Route path="/updateProfile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
       
     </Routes>
 

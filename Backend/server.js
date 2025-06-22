@@ -1,19 +1,21 @@
 import express from "express";
-import cors from "cors";
+import cors from 'cors';
 import dotenv from "dotenv";
-import productsRoutes from "./src/routes/productsRoutes.js";
-import userRoutes from "./src/routes/userRoutes.js";
-import path from "path";
+import productsRoutes from './src/routes/productsRoutes.js';
+import userRoutes from './src/routes/userRoutes.js'; 
+import path from 'path';
 
 dotenv.config();
 const app = express();
 
+
 app.use(cors());
 app.use(express.json());
 
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
-app.use("/product", productsRoutes);
-app.use("/", userRoutes);
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use('/product', productsRoutes);
+app.use('/', userRoutes); 
+app.use(express.urlencoded({ extended: true }));
 
 let server;
 if (process.env.NODE_ENV !== "test") {
@@ -22,3 +24,4 @@ if (process.env.NODE_ENV !== "test") {
   });
 }
 export { app, server };
+
