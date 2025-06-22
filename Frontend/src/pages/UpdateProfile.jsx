@@ -7,16 +7,17 @@ import countriesData from '../data/countries.json';
 import ButtonSend from '../components/ui/ButtonSend.jsx';
 import ButtonCancel from '../components/ui/ButtonCancel.jsx';
 
-
 const UpdateProfile = () => {
-  const { user, logout, validatePhone } = useContext(UserContext);
+  const { user, validatePhone } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     phone: '',
     country: '',
     address: '',
+    currentImage: '',
   });
+
   const [countries, setCountries] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState('');
@@ -26,21 +27,20 @@ const UpdateProfile = () => {
       navigate('/login');
       return;
     }
+
     setCountries(countriesData);
+
     const fetchProfile = async () => {
       try {
         const res = await fetch(`http://localhost:4001/profile/${user.id_users}`);
-        if (!res.ok) {
-          console.error('Error al obtener perfil, status:', res.status);
-          return;
-        }
         const data = await res.json();
-        if (data.ok) {
+        if (res.ok && data.ok) {
           const perfil = data.perfil;
           setFormData({
             phone: perfil.phone || '',
             country: perfil.country || '',
             address: perfil.address || '',
+            currentImage: perfil.image || '',
           });
           if (perfil.image) {
             const imageUrl = perfil.image.startsWith('/')
@@ -48,25 +48,14 @@ const UpdateProfile = () => {
               : `http://localhost:4001/${perfil.image}`;
             setPreviewImage(imageUrl);
           }
-        } else {
-          console.error('Error payload al obtener el perfil:', data.message);
         }
       } catch (err) {
-        console.error('Error en fetch al perfil:', err);
+        console.error('Error al cargar perfil:', err);
       }
     };
+
     fetchProfile();
-  }, [user, navigate]);
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
-  if (!user) {
-    return <div className="text-center p-6">Redirigiendo al login...</div>;
-  }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,35 +73,38 @@ const UpdateProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user.id_users) return;
-    if (formData.phone && !validatePhone(formData.phone)) return;
+    if (!formData.phone || !validatePhone(formData.phone)) {
+      toast.error("Número de teléfono inválido");
+      return;
+    }
 
     const body = new FormData();
     body.append('profileusers_id', user.id_users);
     body.append('phone', formData.phone);
     body.append('country', formData.country);
     body.append('address', formData.address);
+
     if (selectedImage) {
       body.append('image', selectedImage);
+    } else if (formData.currentImage) {
+      body.append('currentImage', formData.currentImage);
     }
 
     try {
       const res = await fetch('http://localhost:4001/UpdateProfile', {
         method: 'POST',
         body,
-        //headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       });
-      const data = await res.json().catch(() => null);
-      console.log('Update profile:', res.status, data);
+      const data = await res.json();
       if (res.ok && data.ok) {
-        toast.success('Perfil actualizado correctamente.');
+        toast.success('Perfil actualizado correctamente');
         navigate('/profile');
       } else {
-        toast.error(data?.message || 'Error al actualizar perfil.');
+        toast.error(data?.message || 'Error al actualizar el perfil');
       }
     } catch (err) {
-      console.error('Error en update-profile:', err);
-      toast.error('Error de conexión con el servidor.', err);
+      console.error('Error al enviar formulario:', err);
+      toast.error('Error de conexión con el servidor');
     }
   };
 
@@ -123,7 +115,6 @@ const UpdateProfile = () => {
   return (
     <>
       <div className="flex min-h-[calc(100vh-80px)]">
-        {/* Imagen lateral izquierda */}
         <div className="hidden lg:flex w-1/3 bg-[#fcebbd]">
           <img
             src="/src/assets/images/updateProfile.png"
@@ -132,14 +123,12 @@ const UpdateProfile = () => {
           />
         </div>
 
-        {/* Contenido del formulario */}
         <div className="flex-1 bg-[var(--createdlightYellow)] flex items-center justify-center">
           <ToastContainer />
           <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6 my-10">
-            <h1 className="text-2xl font-bold mb-4 text-[#3d2f1d]">Modify Profile</h1>
+            <h1 className="text-2xl font-bold mb-4 text-[#3d2f1d]">Modificar Perfil</h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Imagen del perfil */}
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-yellow-700 mb-2">
                   {previewImage ? (
@@ -158,52 +147,43 @@ const UpdateProfile = () => {
                 />
               </div>
 
-              {/* Teléfono */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Teléfono</label>
+                <label htmlFor="phone">Teléfono</label>
                 <input
                   type="text"
                   name="phone"
-                  id="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-[#fff8e7]"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
 
-              {/* País */}
               <div>
-                <label htmlFor="country" className="block text-sm font-medium mb-1">País</label>
+                <label htmlFor="country">País</label>
                 <select
                   name="country"
-                  id="country"
                   value={formData.country}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                  className="w-full px-4 py-2 border rounded-md"
                 >
                   <option value="">Selecciona un país</option>
-                  {countries.map((country) => (
-                    <option key={country.name} value={country.name}>
-                      {country.name}
-                    </option>
+                  {countries.map((c) => (
+                    <option key={c.name} value={c.name}>{c.name}</option>
                   ))}
                 </select>
               </div>
 
-              {/* Dirección */}
               <div>
-                <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Dirección</label>
+                <label htmlFor="address">Dirección</label>
                 <input
                   type="text"
                   name="address"
-                  id="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-[#fff8e7]"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
 
-              {/* Botones */}
               <div className="flex space-x-4 mt-4 justify-center">
                 <ButtonSend />
                 <ButtonCancel onClick={handleCancel} />
@@ -212,8 +192,6 @@ const UpdateProfile = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer separado del contenido principal */}
       <Footer />
     </>
   );
