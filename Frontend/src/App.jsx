@@ -37,6 +37,7 @@ function App() {
       {/* <Route path='/manageproduct' element={<ProtectedRoute><ManageProduct /></ProtectedRoute>} /> */}
       <Route path="/manageproduct" element={<AdminRoute><ManageProduct /></AdminRoute>} />
       <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
+      <Route path="/updateProfile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
       
     </Routes>
 
