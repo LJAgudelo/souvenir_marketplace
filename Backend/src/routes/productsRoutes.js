@@ -17,7 +17,7 @@ const router = express.Router();
 router.get("/", authMiddleware, getProducts);
 router.get("/offert",authMiddleware, getOffert);
 router.get("/featured",authMiddleware, getFeatured);
-router.post("/", upload.single("image"),authMiddleware, newProduct);
+router.post("/", authMiddleware,upload.single("image"), newProduct);
 router.delete("/:id",authMiddleware, deleteProduct);
 //rutas para la vista de administrador
 router.get("/:id", authMiddleware,adminMiddleware,getProductById);
