@@ -63,32 +63,22 @@ const register_user = async (req, res) => {
     const passwordEncrypted = await bcrypt.hash(password, 10);
 
     const checkEmail = await consultasUsers.checkEmailEnabled(email);
+    console.log('Email ya registrado?', checkEmail);
     if (checkEmail) {
-      throw {
-        code: 400,
-        message: `El correo electronico ${email} ya ha sido registrado anteriormente.`,
-      };
+      throw { code: 400, message: `El correo electronico ${email} ya ha sido registrado anteriormente.` };
     }
-    const resultUser = await consultasUsers.newUser_Profile(
-      name,
-      last_name,
-      email,
-      passwordEncrypted,
-      role_id,
-      phone,
-      country,
-      address
-    );
-    if (!resultUser) {
-      throw { code: 400, message: "El registro del usuario ha fallado." };
+    const image_url = req.file ? `/uploads/profile/${req.file.filename}` : null;
+    console.log('URL de imagen:', image_url);
+    const resultUser = await consultasUsers.newUser_Profile(name, last_name, email, passwordEncrypted, role_id, phone, country, address, image_url);    
+    console.log('Usuario registrado:', resultUser);
+    if (!resultUser || !resultUser.profileusers_id ) {
+      throw { code: 400, message: 'El registro del usuario ha fallado.' };
     }
-    res
-      .status(201)
-      .json({ ok: true, message: "El registro del usuario fue exitoso." });
+    res.status(201).json({ ok: true, user: resultUser,  message: 'El registro del usuario fue exitoso.' });
   } catch (error) {
-    const { status = 500, message = "Error interno del servidor" } =
-      handleError(error.code, error.message);
-    return res.status(status).json({ ok: false, message });
+     console.error("ERROR REGISTER USER:", error);  
+    const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
+    return res.status(status).json({ ok: false, message:  error.message });
   }
 };
 
@@ -98,52 +88,39 @@ const getProfile_User = async (req, res) => {
     if (!usuario_id) {
       throw { code: 400, message: "El Id del usuario es requerido." };
     }
-
     const profile = await consultasUsers.getProfileUser(usuario_id);
     if (!profile) {
       throw { code: 400, message: "El usuario no está registrado." };
     }
-
-    res
-      .status(200)
-      .json({ ok: true, message: "Perfil encontrado.", perfil: profile });
+    res.status(200).json({ ok: true, message: "Perfil encontrado.", perfil: profile });
   } catch (error) {
-    console.error(error);
-    const { status = 500, message = "Error interno del servidor" } =
-      handleError(error.code, error.message);
-    res.status(status).json({ ok: false, message });
+    console.error('Error en getProfile_User'.error); 
+    const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
+    res.status(status).json({ ok: false, message:  error.message });
   }
 };
 
 const updateProfile_User = async (req, res) => {
   try {
-    const { profileusers_id, phone, country, address, image, password } =
-      req.body;
+    const { profileusers_id, phone, country, address, image, password } = req.body;
     let passwordEncrypted;
 
     if (password) {
       passwordEncrypted = await bcrypt.hash(password, 10);
     }
-
-    const result = await consultasUsers.updateProfileUser(
-      profileusers_id,
-      phone,
-      country,
-      address,
-      image,
-      passwordEncrypted
-    );
+    let image_url = null;
+    if (req.file) {
+      image_url = `/uploads/profile/${req.file.filename}`;
+    }
+     const result = await consultasUsers.updateProfileUser (profileusers_id, phone, country, address, image_url, passwordEncrypted);
     if (!result) {
-      throw { code: 400, message: "Actualización del usuario fallido." };
+      throw { code: 400, message: 'Actualización del usuario fallida.' };
     }
 
-    res
-      .status(200)
-      .json({ ok: true, message: "Actualización del usuario exitoso." });
+    res.status(200).json({ ok: true,  user: result, message: 'Actualización del usuario exitoso.' });
   } catch (error) {
-    const { status = 500, message = "Error interno del servidor" } =
-      handleError(error.code, error.message);
-    res.status(status).json({ ok: false, message });
+    const { status = 500, message = 'Error interno del servidor' } = handleError(error.code, error.message);
+    res.status(status).json({ ok: false, message:  error.message });
   }
 };
 
