@@ -1,32 +1,35 @@
+
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 
-// carpeta donde se guardarán las imágenes
+const uploadDir = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'uploads/'); 
+  destination: (req, file, cb) => {
+    cb(null, 'uploads');           
   },
-  filename: function(req, file, cb) {
-    
-    cb(null, Date.now() + path.extname(file.originalname));
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const filename = `product_${Date.now()}${ext}`; 
+    cb(null, filename);
   }
 });
 
+
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-  if (extname && mimetype) {
-    return cb(null, true);
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
   } else {
-    cb(new Error('Solo se permiten imágenes'));
+    cb(new Error('Solo se permiten imágenes (jpeg, png, webp).'), false);
   }
 };
 
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter
-});
+const limits = { fileSize: 5 * 1024 * 1024 }; // 5 MB
 
-export default upload;
+const uploadProduct = multer({ storage, fileFilter, limits });
+export default uploadProduct;

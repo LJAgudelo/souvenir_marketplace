@@ -2,17 +2,27 @@ import React, { useState,useContext } from 'react';
 import { IoMenu } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, logout} = useContext(UserContext);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
   const isAdmin = user?.role_id === 1;
 
-  const links = [
+  const isLoggedIn = !!localStorage.getItem("token") || !!user;
+
+  const handleLogout = () => {
+    logout();              
+    navigate("/login");    
+  };
+
+  const staticLinks = [
     { name: 'Offers', to: '/offert' },
     { name: 'Featured Products', to: '/featured' },
     { name: 'Products', to: '/product' },
@@ -20,7 +30,6 @@ const Navbar = () => {
     { name: 'Profile', to: '/profile' },
     { name: 'Sell', to: '/sell' },
     ...(isAdmin ? [{ name: 'Manage Product', to: '/manageproduct' }] : []),
-    { name: 'Sign Up', to: '' }
   ];
 
   return (
@@ -39,7 +48,7 @@ const Navbar = () => {
           {/* Menú para pantallas grandes */}
           <div className="hidden md:flex md:items-center md:space-x-6">
             <ul className="flex flex-col md:flex-row">
-              {links.map(({ name, to }) => (
+              {staticLinks.map(({ name, to }) => (
                 <li key={name}>
                   <Link
                     to={to}
@@ -49,6 +58,25 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
+
+              {/* Botón dinámico: Log In o Log Out */}
+              <li>
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleLogout}
+                    className="block px-4 py-2 text-white hover:bg-yellow-500 rounded md:hover:bg-transparent md:hover:text-yellow-300"
+                  >
+                    Log Out
+                  </button>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-white hover:bg-yellow-500 rounded md:hover:bg-transparent md:hover:text-yellow-300"
+                  >
+                    Log In
+                  </Link>
+                )}
+              </li>
             </ul>
           </div>
         </div>
@@ -57,17 +85,40 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden mt-4">
             <ul className="flex flex-col">
-              {links.map(({ name, to }) => (
+              {staticLinks.map(({ name, to }) => (
                 <li key={name}>
                   <Link
                     to={to}
-                    onClick={() => setIsOpen(false)} // cierra el menú al hacer clic
+                    onClick={() => setIsOpen(false)}
                     className="block px-4 py-2 text-white hover:bg-yellow-500 rounded"
                   >
                     {name}
                   </Link>
                 </li>
               ))}
+
+              {/* Botones LogIn / LogOut */}
+              <li>
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-white hover:bg-yellow-500 rounded"
+                  >
+                    Log Out
+                  </button>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="block px-4 py-2 text-white hover:bg-yellow-500 rounded"
+                  >
+                    Log In
+                  </Link>
+                )}
+              </li>
             </ul>
           </div>
         )}

@@ -41,6 +41,7 @@ function CartProduct({ id, name, price, image,stock,description }) {
         <button
           onClick={decrement}
           className="bg-[#f2b035]  px-2 rounded text-lg hover:bg-gray-400"
+          disabled={quantity <= 1}
         >
           -
         </button>
@@ -48,6 +49,7 @@ function CartProduct({ id, name, price, image,stock,description }) {
         <button
           onClick={increment}
           className="bg-[#f2b035] px-2 rounded text-lg hover:bg-gray-400"
+          disabled={quantity >= stock}
         >
           +
         </button>
