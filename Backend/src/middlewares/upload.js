@@ -1,5 +1,4 @@
 
-// src/middlewares/uploadProduct.js
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -15,12 +14,12 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const filename = `product_${Date.now()}${ext}`; // 🔹 prefijo product_
+    const filename = `product_${Date.now()}${ext}`; 
     cb(null, filename);
   }
 });
 
-// mismos tipos y límite que en el middleware de perfil
+
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
   if (allowedTypes.includes(file.mimetype)) {
