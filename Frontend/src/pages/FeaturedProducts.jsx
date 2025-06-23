@@ -5,6 +5,8 @@ import Sidebar from "../components/layout/Sidebar.jsx";
 import Footer from "../components/layout/Footer.jsx";
 import { UserContext } from "../context/userContext.jsx";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001'
+
 function FeaturedProduct() {
   const [products, setProducts] = useState([]);
   const { token } = useContext(UserContext);
@@ -12,7 +14,7 @@ function FeaturedProduct() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:4001/product", {
+    fetch(`${API_URL}/ product`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -47,7 +49,7 @@ function FeaturedProduct() {
                     price={product.price}
                     stock={product.stock}
                     description={product.description}
-                    image={`http://localhost:4001${product.image_url?.startsWith("/") ? "" : "/"}${product.image_url}`}
+                    image={`${API_URL}${product.image_url?.startsWith("/") ? "" : "/"}${product.image_url}`}
                     onAddToCart={() => alert(`${product.name} agregado al carrito`)}
                   />
                 ))

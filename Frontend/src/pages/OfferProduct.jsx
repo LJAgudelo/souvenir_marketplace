@@ -6,6 +6,8 @@ import { UserContext } from "../context/userContext.jsx";
 import Sidebar from "../components/layout/Sidebar.jsx";
 import Footer from "../components/layout/Footer.jsx";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001'
+
 function OfferProduct() {
   const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
@@ -14,7 +16,7 @@ function OfferProduct() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:4001/product/offert", {
+    fetch(`${API_URL}/product/offert`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,7 +50,7 @@ function OfferProduct() {
                     price={product.price}
                     stock={product.stock}
                     description={product.description}
-                    image={`http://localhost:4001${product.image_url?.startsWith("/") ? "" : "/"}${product.image_url}`}
+                    image={`${API_URL}${product.image_url?.startsWith("/") ? "" : "/"}${product.image_url}`}
                     onAddToCart={() => addToCart(product)}
                   />
                 ))

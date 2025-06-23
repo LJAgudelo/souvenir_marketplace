@@ -8,7 +8,7 @@ import ButtonLogIn from '../components/ui/ButtonLogIn.jsx';
 import ButtonLogOut from '../components/ui/ButtonLogOut.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
-const URL_SERVER = 'http://localhost:4001/login';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001'
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -18,7 +18,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (user) {
       toast.info(`Ya has iniciado sesión como ${user.name || user.email || 'usuario'}.`);
-      navigate('/product'); 
+      navigate('/product');
     }
   }, [user, navigate]);
 
@@ -27,36 +27,36 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch(URL_SERVER, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: form.email,
-        password: form.password,
-      }),
-    });
+    e.preventDefault();
+    try {
+      const res = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
 
-    const data = await res.json(); // solo se puede usar una vez
-    console.log('Login:', data);
+      const data = await res.json(); // solo se puede usar una vez
+      console.log('Login:', data);
 
-    if (!res.ok || !data.ok) {
-      throw new Error(data.message || 'Credenciales inválidas');
+      if (!res.ok || !data.ok) {
+        throw new Error(data.message || 'Credenciales inválidas');
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.usuario));
+
+      const userData = data;
+      login(userData);
+      toast.success(`Bienvenid@, ${userData.usuario?.name || userData.usuario?.email}`);
+      navigate('/product');
+    } catch (error) {
+      console.error('Login error:', error.message);
+      toast.error(error.message || 'Correo o contraseña incorrectos');
     }
-
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.usuario));
-   
-    const userData = data;
-    login(userData); 
-    toast.success(`Bienvenid@, ${userData.usuario?.name || userData.usuario?.email}`);
-    navigate('/product');
-  } catch (error) {
-    console.error('Login error:', error.message);
-    toast.error(error.message || 'Correo o contraseña incorrectos');
-  }
-};  
+  };
 
   return (
     <>
