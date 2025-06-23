@@ -7,6 +7,9 @@ import countriesData from '../data/countries.json';
 import ButtonSend from '../components/ui/ButtonSend.jsx';
 import ButtonCancel from '../components/ui/ButtonCancel.jsx';
 
+import updateProfile from "../assets/images/updateProfile.png"
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+
 const UpdateProfile = () => {
   const { user, validatePhone } = useContext(UserContext);
   const navigate = useNavigate();
@@ -32,7 +35,7 @@ const UpdateProfile = () => {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`http://localhost:4001/profile/${user.id_users}`);
+        const res = await fetch(`${API_URL}/${user.id_users}`);
         const data = await res.json();
         if (res.ok && data.ok) {
           const perfil = data.perfil;
@@ -44,8 +47,8 @@ const UpdateProfile = () => {
           });
           if (perfil.image) {
             const imageUrl = perfil.image.startsWith('/')
-              ? `http://localhost:4001${perfil.image}`
-              : `http://localhost:4001/${perfil.image}`;
+              ? `${API_URL}${perfil.image}`
+              : `${API_URL}/${perfil.image}`;
             setPreviewImage(imageUrl);
           }
         }
@@ -91,7 +94,7 @@ const UpdateProfile = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:4001/UpdateProfile', {
+      const res = await fetch(`${API_URL}/UpdateProfile`, {
         method: 'POST',
         body,
       });
@@ -117,7 +120,7 @@ const UpdateProfile = () => {
       <div className="flex min-h-[calc(100vh-80px)]">
         <div className="hidden lg:flex w-1/3 bg-[#fcebbd]">
           <img
-            src="/src/assets/images/updateProfile.png"
+            src={updateProfile}
             alt="Banner perfil"
             className="w-full object-cover"
           />

@@ -7,6 +7,10 @@ import ButtonUpdate from '../components/ui/ButtonUpdate.jsx';
 import ButtonLogOut from '../components/ui/ButtonLogOut.jsx';
 import Sidebar from '../components/layout/Sidebar.jsx';
 
+import LogoRegister from ".././assets/images/LogoRegister.jpg"
+
+
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 
 const Profile = () => {
@@ -86,7 +90,7 @@ const Profile = () => {
         {/* Imagen lateral izquierda */}
         <div className="w-[10%] bg-[#f9e5bb] flex items-center justify-center">
           <img
-            src="./src/assets/images/LogoRegister.jpg"
+            src={LogoRegister}
             alt="Imagen lateral"
             className="object-cover h-full w-full"
           />

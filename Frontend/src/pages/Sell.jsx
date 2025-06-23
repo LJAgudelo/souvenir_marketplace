@@ -6,6 +6,8 @@ import ButtonDeleteImg from '../components/ui/ButtonDeleteImg.jsx';
 import axios from 'axios';
 import { UserContext } from '../context/userContext.jsx';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+
 const Sell = () => {
     const [product, setProduct] = useState({
         name: '',
@@ -54,7 +56,7 @@ const Sell = () => {
         formData.append('image', product.image);
         console.log("Enviando producto:", [...formData.entries()]);
         try {
-            await axios.post('http://localhost:4001/product', formData, {
+            await axios.post(`${API_URL}/product`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,

@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext } from "../context/cartContext";
+import logo from ".././assets/images/logo.png"
 
 
 function PaymentPage() {
@@ -10,7 +11,7 @@ function PaymentPage() {
   const handlePayment = () => {
     alert("Pago simulado con éxito. Gracias por tu compra!");
     clearCart();
-    navigate("/profile"); 
+    navigate("/profile");
   };
 
   return (
@@ -19,7 +20,7 @@ function PaymentPage() {
 
       <div className="bg-white p-8 rounded shadow-md max-w-md w-full">
         <p className="mb-4 flex justify-center">
-          <img src="/src/assets/images/logo.png" alt="Logo" className="w-45 rounded-sm " />
+          <img src={logo} alt="Logo" className="w-45 rounded-sm " />
         </p>
 
         <button

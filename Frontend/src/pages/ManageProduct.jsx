@@ -45,9 +45,11 @@ const ManageProduct = () => {
         setOriginalImageUrl(null); // si la elimina manualmente, también borramos la URL original
     };
 
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001'
+
     const handleSearch = async () => {
         try {
-            const res = await axios.get(`http://localhost:4001/product/${product.id}`, {
+            const res = await axios.get(`${API_URL}/product/${product.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = res.data;
@@ -62,7 +64,7 @@ const ManageProduct = () => {
                 image: null // no cargamos el archivo como tal
             });
             if (data.image_url) {
-                const fullUrl = `http://localhost:4001${data.image_url}`;
+                const fullUrl = `${API_URL}${data.image_url}`;
                 setPreviewImage(fullUrl);
                 setOriginalImageUrl(data.image_url); // guardamos la ruta relativa original
             } else {
@@ -77,7 +79,7 @@ const ManageProduct = () => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:4001/product/${product.id}`, {
+            await axios.delete(`${API_URL}/product/${product.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert('Producto eliminado');
@@ -115,7 +117,7 @@ const ManageProduct = () => {
                 formData.append('image_url', originalImageUrl); // enviamos la url previa si no cambió
             }
 
-            await axios.put(`http://localhost:4001/product/${product.id}`, formData, {
+            await axios.put(`${API_URL}/product/${product.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`

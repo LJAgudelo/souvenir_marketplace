@@ -1,12 +1,16 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { IoMenu } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 import { useNavigate } from 'react-router-dom';
 
+
+import bannerMovil from '../../assets/images/bannerMovil.png'
+
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout} = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -18,8 +22,8 @@ const Navbar = () => {
   const isLoggedIn = !!localStorage.getItem("token") || !!user;
 
   const handleLogout = () => {
-    logout();              
-    navigate("/login");    
+    logout();
+    navigate("/login");
   };
 
   const staticLinks = [
@@ -125,7 +129,7 @@ const Navbar = () => {
       </nav>
 
       <img
-        src="/src/assets/images/bannerMovil.png"
+        src={bannerMovil}
         alt="Banner versión móvil"
         className="mt-4 block md:hidden w-full"
       />
