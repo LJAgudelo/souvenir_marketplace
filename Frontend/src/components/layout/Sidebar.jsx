@@ -1,4 +1,4 @@
-import React , { useContext } from 'react'
+import React , { useContext } from 'react';
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { AiOutlineProduct } from "react-icons/ai";
 import { BsCartCheck } from "react-icons/bs";
@@ -8,14 +8,19 @@ import { PiSignOut } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { MdOutlineManageAccounts } from "react-icons/md";
-
-
+import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
 import { UserContext } from '../../context/userContext.jsx';
 
 const Sidebar = () => {
-    const { user } = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
+    const navigate = useNavigate();
+    const isLoggedIn = !!localStorage.getItem('token') || !!user;
+    const handleLogout = () => {
+        logout(); 
+        navigate('/login'); 
+    };
     return (
         <>
             <aside id="default-sidebar" className="hidden lg:fixed lg:top-0 lg:left-0 lg:z-40 lg:w-55 lg:h-screen lg:transition-transform lg:block" aria-label="Sidebar">
@@ -70,11 +75,22 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         )}
+                         {/* Botón dinámico Log In / Log Out */}
                         <li>
-                            <Link to="/" className="flex items-center p-2  rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]  ">
-                                <PiSignOut />
-                                <span className="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
+                        {isLoggedIn ? (
+                            <button
+                            onClick={handleLogout}
+                            className="flex items-center w-full p-2 rounded-lg text-left dark:text-black hover:bg-[var(--createdlightYellow)]"
+                            >
+                            <PiSignOut />
+                            <span className="flex-1 ms-3 whitespace-nowrap">Log Out</span>
+                            </button>
+                        ) : (
+                            <Link to="/login" className="flex items-center p-2 rounded-lg dark:text-black hover:bg-[var(--createdlightYellow)]">
+                            <PiSignOut />
+                            <span className="flex-1 ms-3 whitespace-nowrap">Log In</span>
                             </Link>
+                        )}
                         </li>
                     </ul>
                 </div>

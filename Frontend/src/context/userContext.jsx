@@ -36,12 +36,17 @@ const UserProvider = ({ children }) => {
     const loadUser = async () => {
       try {
         const storedUser = localStorage.getItem('user');
-        const storedToken = localStorage.getItem('token');      
-        if (storedUser && storedToken) {
-          const parsedUser = JSON.parse(storedUser);
+        const storedToken = localStorage.getItem('token');     
+        if (!storedUser || storedUser === 'undefined' || !storedToken) {
+          return;
+        } 
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser && parsedUser.id_users) {
           setUser(parsedUser);
           setToken(storedToken);
           await fetchAndSetProfile(parsedUser.id_users);
+        } else {
+          console.warn("Usuario inválido en localStorage:", parsedUser);
         }
       } catch (error) {
         console.error('Error al cargar usuario desde localStorage:', error);
@@ -78,15 +83,24 @@ const UserProvider = ({ children }) => {
       console.error('Error fetch perfil:', error);
     }
   };
-
   
   const login = async (userData) => {
-    setUser(userData.usuario);
-    setToken(userData.token);                            
-    localStorage.setItem('user', JSON.stringify(userData.usuario));
-    localStorage.setItem('token', userData.token);      
-    await fetchAndSetProfile(userData.usuario.id_users);
-  };
+  if (!userData?.user || !userData?.token) {
+    console.error("Datos de login inválidos:", userData);
+    return;
+  }
+  setUser(userData.user);
+  setToken(userData.token);
+  localStorage.setItem('user', JSON.stringify(userData.user));
+  localStorage.setItem('token', userData.token);
+
+  if (userData.user.id_users) {
+    await fetchAndSetProfile(userData.user.id_users);
+  } else {
+    console.warn("No se pudo obtener el ID del usuario en login.");
+  }
+};
+
 
   const logout = () => {   
     setUser(null);
