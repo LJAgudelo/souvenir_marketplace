@@ -14,7 +14,7 @@ function FeaturedProduct() {
   useEffect(() => {
     if (!token) return;
 
-    fetch(`${API_URL}/ product`, {
+    fetch(`${API_URL}/product`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
