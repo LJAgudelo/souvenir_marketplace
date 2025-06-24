@@ -31,7 +31,7 @@
 
 ---
 ## 🌐 Enlaces del proyecto
-- **Frontend en producción:** [Ver en Vercel](https://TU-FRONTEND.vercel.app)
-- **Backend en producción:** [API en Render](https://TU-BACKEND.onrender.com)
+- **Frontend en producción:** [Ver en Vercel](https://souvenir-marketplace.vercel.app/)
+- **Backend en producción:** [API en Render](https://souvenir-marketplace.onrender.com/)
 - **Base de Datos:** PostgreSQL desplegada en Render, configurada mediante variables de entorno *(acceso privado)*
 ---
