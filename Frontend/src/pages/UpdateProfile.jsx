@@ -35,7 +35,7 @@ const UpdateProfile = () => {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`${API_URL}/${user.id_users}`);
+        const res = await fetch(`${API_URL}/profile/${user.id_users}`);
         const data = await res.json();
         if (res.ok && data.ok) {
           const perfil = data.perfil;
