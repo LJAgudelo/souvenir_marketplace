@@ -19,22 +19,22 @@ const Footer = ({ withSidebar = false }) => {
                 <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6">
                     <div className="flex flex-col items-center space-y-2">
                         <IoMdKey className="text-2xl" />
-                        <h3 className="font-serif ">Compra segura</h3>
+                        <h3 className="font-serif ">Safe purchase</h3>
                     </div>
 
                     <div className="flex flex-col items-center space-y-2">
                         <TfiWallet className="text-2xl" />
-                        <h3 className="font-serif ">Pago en línea</h3>
+                        <h3 className="font-serif ">Online payment</h3>
                     </div>
 
                     <div className="flex flex-col items-center space-y-2">
                         <FaShippingFast className="text-2xl" />
-                        <h3 className="font-serif ">Envíos</h3>
+                        <h3 className="font-serif ">Shipping</h3>
                     </div>
 
                     <div className="flex flex-col items-center space-y-2">
                         <MdOutlineAssignmentReturn className="text-2xl" />
-                        <h3 className="font-serif ">Devoluciones</h3>
+                        <h3 className="font-serif ">Returns</h3>
                     </div>
 
                     <div className="flex-shrink-0">
@@ -47,7 +47,8 @@ const Footer = ({ withSidebar = false }) => {
                     </div>
                 </div>
                 <div className="text-center mt-4 text-xs opacity-80">
-                    &copy; {new Date().getFullYear()} Todos los derechos reservados.
+                    &copy; {new Date().getFullYear()}
+                    All rights reserved.
                 </div>
             </div>
         </footer>
