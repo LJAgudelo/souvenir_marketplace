@@ -62,11 +62,11 @@ const Sell = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            alert('Producto creado exitosamente');
+            alert('Successfully created product');
             window.location.reload();
         } catch (error) {
-            console.error('Error al subir producto', error);
-            alert('Error al crear producto');
+            console.error('Error uploading product', error);
+            alert('Error creating product');
         }
     };
 

@@ -89,7 +89,7 @@ const LoginPage = () => {
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="Correo Electrónico"
+                  placeholder="Email"
                   value={form.email}
                   onChange={handleChange}
                   required
@@ -108,7 +108,7 @@ const LoginPage = () => {
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="Contraseña"
+                  placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
                   required

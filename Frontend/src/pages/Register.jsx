@@ -35,7 +35,7 @@ const RegisterPage = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    console.log("Imagen seleccionada:", file);
+    console.log("Selected image: ", file);
     setSelectedImage(file);
     if (file) {
       setPreviewImage(URL.createObjectURL(file));
@@ -146,7 +146,7 @@ const RegisterPage = () => {
                   type="text"
                   name="name"
                   id="name"
-                  placeholder="Nombres"
+                  placeholder="Name"
                   value={form.name}
                   onChange={handleChange}
                   required
@@ -165,7 +165,7 @@ const RegisterPage = () => {
                   type="text"
                   name="last_name"
                   id="last_name"
-                  placeholder="Apellidos"
+                  placeholder="Last name"
                   value={form.last_name}
                   onChange={handleChange}
                   required
@@ -186,7 +186,7 @@ const RegisterPage = () => {
                   type="email"
                   name="email"
                   id="email"
-                  placeholder="Correo Electronico"
+                  placeholder="Email"
                   value={form.email}
                   onChange={handleChange}
                   required
@@ -202,7 +202,6 @@ const RegisterPage = () => {
                 htmlFor="password"
                 className="block text-sm font-medium mb-1"
               >
-
                 Password
               </label>
               <div className="relative">
@@ -210,7 +209,7 @@ const RegisterPage = () => {
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="Contraseña"
+                  placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
                   required
@@ -236,7 +235,8 @@ const RegisterPage = () => {
                 required
                 className="w-full px-4 py-2 border bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-300"
               >
-                <option value="">Selecciona un país</option>
+                <option value="">
+                  Select a country</option>
                 {countries.map((country) => (
                   <option key={country.name} value={country.name}>
                     {country.name}
@@ -255,7 +255,7 @@ const RegisterPage = () => {
                   type="text"
                   name="phone"
                   id="phone"
-                  placeholder="Telefono"
+                  placeholder="Phone"
                   value={form.phone}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-300"
@@ -278,7 +278,7 @@ const RegisterPage = () => {
                   type="text"
                   name="address"
                   id="address"
-                  placeholder="Dirección"
+                  placeholder="Address"
                   value={form.address}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border bg-white rounded-md focus:outline-none focus:ring focus:ring-blue-300"
