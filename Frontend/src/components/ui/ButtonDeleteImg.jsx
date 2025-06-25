@@ -13,7 +13,7 @@ const ButtonDeleteImg = ({ onClick }) => {
 "
       onClick={onClick}
     >
-      Eliminar
+      Delet
     </button>
   );
 };

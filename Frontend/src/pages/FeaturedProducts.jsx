@@ -37,7 +37,7 @@ function FeaturedProduct() {
       <Sidebar />
       <div className="flex flex-1">
         <main className="flex-1 bg-[#f2ddb6] lg:ml-[220px] p-4 md:p-6">
-          <h1 className="text-3xl font-bold mb-4 text-center">Productos Destacados</h1>
+          <h1 className="text-3xl font-bold mb-4 text-center">Featured Products</h1>
           <div className="flex justify-center">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {products.length > 0 ? (
@@ -55,7 +55,7 @@ function FeaturedProduct() {
                 ))
               ) : (
                 <p className="text-center col-span-full text-gray-600">
-                  No hay productos destacados disponibles.
+                  There are no featured products available.
                 </p>
               )}
             </div>

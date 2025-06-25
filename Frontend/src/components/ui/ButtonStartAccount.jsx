@@ -18,7 +18,7 @@ const ButtonStartAccount = () => {
             text-white 
             transition-all duration-300 ease-in-out 
         ">
-                Ingresar
+                Register
             </button>
         </Link>
     )

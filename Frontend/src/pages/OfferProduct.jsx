@@ -26,11 +26,11 @@ function OfferProduct() {
         if (Array.isArray(data)) {
           setProducts(data);
         } else {
-          console.warn("Respuesta inesperada:", data);
+          console.warn("Unexpected response:", data);
           setProducts([]);
         }
       })
-      .catch((err) => console.error("Error al cargar productos:", err));
+      .catch((err) => console.error("Error loading products:", err));
   }, [token]);
 
   return (
@@ -38,7 +38,7 @@ function OfferProduct() {
       <Sidebar />
       <div className="flex flex-1">
         <main className="flex-1 bg-[#f2ddb6] lg:ml-[220px] p-4 md:p-6">
-          <h1 className="text-3xl font-bold mb-4 text-center">Productos en Oferta</h1>
+          <h1 className="text-3xl font-bold mb-4 text-center">Products on Offer</h1>
           <div className="flex justify-center">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {products.length > 0 ? (
@@ -56,7 +56,8 @@ function OfferProduct() {
                 ))
               ) : (
                 <p className="text-center col-span-full text-gray-600">
-                  No hay productos en oferta disponibles.
+
+                  There are no products on sale available.
                 </p>
               )}
             </div>

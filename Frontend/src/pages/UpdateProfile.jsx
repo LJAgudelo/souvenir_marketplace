@@ -53,7 +53,7 @@ const UpdateProfile = () => {
           }
         }
       } catch (err) {
-        console.error('Error al cargar perfil:', err);
+        console.error('Error loading profile:', err);
       }
     };
 
@@ -77,7 +77,7 @@ const UpdateProfile = () => {
     e.preventDefault();
 
     if (!formData.phone || !validatePhone(formData.phone)) {
-      toast.error("Número de teléfono inválido");
+      toast.error("Invalid phone number");
       return;
     }
 
@@ -100,14 +100,14 @@ const UpdateProfile = () => {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        toast.success('Perfil actualizado correctamente');
+        toast.success('Profile updated successfully');
         navigate('/profile');
       } else {
-        toast.error(data?.message || 'Error al actualizar el perfil');
+        toast.error(data?.message || 'Error updating profile');
       }
     } catch (err) {
-      console.error('Error al enviar formulario:', err);
-      toast.error('Error de conexión con el servidor');
+      console.error('Error submitting form:', err);
+      toast.error('Server connection error');
     }
   };
 
@@ -129,7 +129,7 @@ const UpdateProfile = () => {
         <div className="flex-1 bg-[var(--createdlightYellow)] flex items-center justify-center">
           <ToastContainer />
           <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg p-6 my-10">
-            <h1 className="text-2xl font-bold mb-4 text-[#3d2f1d]">Modificar Perfil</h1>
+            <h1 className="text-2xl font-bold mb-4 text-[#3d2f1d]">Modify Profile</h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col items-center">
@@ -151,7 +151,8 @@ const UpdateProfile = () => {
               </div>
 
               <div>
-                <label htmlFor="phone">Teléfono</label>
+                <label htmlFor="phone">
+                  Phone</label>
                 <input
                   type="text"
                   name="phone"
@@ -162,14 +163,16 @@ const UpdateProfile = () => {
               </div>
 
               <div>
-                <label htmlFor="country">País</label>
+                <label htmlFor="country">
+                  Country</label>
                 <select
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border rounded-md"
                 >
-                  <option value="">Selecciona un país</option>
+                  <option value="">
+                    Select a country</option>
                   {countries.map((c) => (
                     <option key={c.name} value={c.name}>{c.name}</option>
                   ))}
@@ -177,7 +180,8 @@ const UpdateProfile = () => {
               </div>
 
               <div>
-                <label htmlFor="address">Dirección</label>
+                <label htmlFor="address">
+                  Address</label>
                 <input
                   type="text"
                   name="address"

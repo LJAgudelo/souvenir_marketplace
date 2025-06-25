@@ -15,7 +15,8 @@ const ButtonCreateAccount = () => {
                 text-white 
                 transition-all duration-300 ease-in-out 
             ">
-                Explorar
+
+                Login
             </button>
         </Link>
     )

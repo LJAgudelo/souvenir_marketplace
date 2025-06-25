@@ -52,10 +52,10 @@ const Profile = () => {
             image: data.perfil.image || '',
           }));
         } else {
-          console.error('Error en perfil:', data.message);
+          console.error('Error in profile :', data.message);
         }
       } catch (error) {
-        console.error('Error al solicitar perfil:', error);
+        console.error('Error requesting profile:', error);
       }
     };
 
@@ -69,7 +69,8 @@ const Profile = () => {
   }, [user, navigate]);
 
   if (!user) {
-    return <div className="text-center p-6">Redirigiendo al login...</div>;
+    return <div className="text-center p-6">
+      Redirecting to login...</div>;
   }
 
   const imageSrc = userData.image
@@ -116,7 +117,8 @@ const Profile = () => {
                 {/* Detalles del perfil */}
                 <div className="w-2/3 space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700">Nombre</label>
+                    <label className="block text-sm font-semibold text-gray-700">
+                      Name</label>
                     <input
                       type="text"
                       value={userData.name}
@@ -136,7 +138,7 @@ const Profile = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700">País</label>
+                    <label className="block text-sm font-semibold text-gray-700">Country</label>
                     <input
                       type="text"
                       value={userData.country}
@@ -146,7 +148,7 @@ const Profile = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700">Teléfono</label>
+                    <label className="block text-sm font-semibold text-gray-700">Phone</label>
                     <input
                       type="text"
                       value={userData.phone}
@@ -156,7 +158,8 @@ const Profile = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700">Dirección</label>
+                    <label className="block text-sm font-semibold text-gray-700">
+                      Address</label>
                     <input
                       type="text"
                       value={userData.address}

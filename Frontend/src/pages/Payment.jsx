@@ -16,7 +16,7 @@ function PaymentPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#f2ddb6] p-6">
-      <h1 className="text-3xl font-bold mb-6">Simulador de Pago</h1>
+      <h1 className="text-3xl font-bold mb-6">Payment Simulator</h1>
 
       <div className="bg-white p-8 rounded shadow-md max-w-md w-full">
         <p className="mb-4 flex justify-center">
@@ -27,7 +27,7 @@ function PaymentPage() {
           onClick={handlePayment}
           className="bg-[#2a593b] hover:bg-green-700 text-white px-6 py-3 rounded w-full transition"
         >
-          Pagar
+          Pay
         </button>
       </div>
     </div>

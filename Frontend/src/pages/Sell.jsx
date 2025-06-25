@@ -44,7 +44,7 @@ const Sell = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!product.image) {
-            alert("Por favor selecciona una imagen para el producto.");
+            alert("Please select an image for the product.");
             return;
         }
 

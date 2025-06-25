@@ -73,7 +73,7 @@ const ManageProduct = () => {
             }
         } catch (err) {
             console.error(err);
-            alert('Producto no encontrado');
+            alert('Product not found');
         }
     };
 
@@ -82,7 +82,7 @@ const ManageProduct = () => {
             await axios.delete(`${API_URL}/product/${product.id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            alert('Producto eliminado');
+            alert('Product removed');
             setProduct({
                 id: '',
                 name: '',
@@ -97,7 +97,7 @@ const ManageProduct = () => {
             setOriginalImageUrl(null);
         } catch (err) {
             console.error(err);
-            alert('Error al eliminar');
+            alert('Error to delete');
         }
     };
 
@@ -140,7 +140,7 @@ const ManageProduct = () => {
             setOriginalImageUrl(null);
         } catch (err) {
             console.error(err);
-            alert('Error al actualizar producto');
+            alert('Error updating product');
         }
     };
 

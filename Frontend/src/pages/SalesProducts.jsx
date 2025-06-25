@@ -56,7 +56,8 @@ function SalesProducts() {
                 ))
               ) : (
                 <p className="text-center col-span-full text-gray-600">
-                  No hay productos disponibles o hubo un error.
+
+                  There are no products available or there was an error.
                 </p>
               )}
             </div>
