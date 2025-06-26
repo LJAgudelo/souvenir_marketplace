@@ -1,6 +1,6 @@
 import React from 'react'
-import ButtonCreateAccount from '../ui/ButtonCreateAccount'
-import ButtonStartAccount from '../ui/ButtonStartAccount'
+import ButtonCreateAcccount from '../ui/ButtonCreateAccount.jsx'
+import ButtonStartAccount from '../ui/ButtonStartAccount.jsx'
 
 // importación de imagenes
 import bannerMarket from '../../assets/images/bannerMarket.png'

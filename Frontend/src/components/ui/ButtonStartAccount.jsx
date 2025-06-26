@@ -6,8 +6,7 @@ const ButtonStartAccount = () => {
 
         <Link to="/register">
             <button className="
-        
-            bg-[var(--createdBrown)] hover:bg-[var(--createdlightYellow)] active:bg-[var(--createdOrange)] 
+                    bg-[var(--createdBrown)] hover:bg-[var(--createdlightYellow)] active:bg-[var(--createdOrange)] 
             px-3 py-1 text-xs   /* Móviles: padding y fuente pequeñas */
             sm:px-4 sm:py-2 sm:text-sm   /* Tablets: un poco más grandes */
             md:px-15 md:py-3 md:text-base md:w-[210px]  /* Escritorio mediano */
